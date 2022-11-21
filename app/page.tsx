@@ -142,10 +142,10 @@ function Footer(props: any) {
     <section className={`w-full mx-auto text-center text-white text-xs py-6`}>
       <div>+</div>
       <div className="my-6">logos</div>
-      <div className="font-bold uppercase space-x-16">
-        <a href="#" className="hover:underline hover:font-normal">Lorem Upsum</a>
-        <a href="#" className="hover:underline hover:font-normal">Lorem Upsum</a>
-        <a href="#" className="hover:underline hover:font-normal">Lorem Upsum</a>
+      <div className="font-bold uppercase space-x-16 [&>*:hover]:underline [&>*:hover]:font-normal">
+        <a href="#">Lorem Upsum</a>
+        <a href="#">Lorem Upsum</a>
+        <a href="#">Lorem Upsum</a>
       </div>
       <div className="max-w-[416px] mx-auto my-4 uppercase">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consequat pharetra, nisi proin convallis.</div>
       <div>+</div>
@@ -161,13 +161,13 @@ export default function Home() {
       <BinaryHR />
 
       <div className="items-center m-8 text-white divide-x grid md:grid-cols-2">
-        <AboutBlock title="ARCH MISSION" desc="The Arch Mission Foundation chose a new technology — nickel based films of Nanofiche™ — for the Arch Lunar Library.™" type="TYPE"/>
-        <AboutBlock title="BLOCKTAG" type="TYPE1"/>
+        <AboutBlock title="ARCH MISSION" desc="The Arch Mission Foundation chose a new technology — nickel based films of Nanofiche™ — for the Arch Lunar Library.™" type="TYPE" index={"01"} />
+        <AboutBlock title="BLOCKTAG" type="TYPE1" index={"02"} />
       </div>
       <hr className="mx-12"/>
       <div className="items-center m-8 text-white divide-x grid md:grid-cols-2">
-        <AboutBlock title="NANOFICHE" type="TYPE2"/>
-        <AboutBlock title="NFT BLOCKCHAIN" type="TYPE3"/>
+        <AboutBlock title="NANOFICHE" type="TYPE2" index={"03"} />
+        <AboutBlock title="NFT BLOCKCHAIN" type="TYPE3" index={"04"} />
       </div>
 
       <BinaryHR />

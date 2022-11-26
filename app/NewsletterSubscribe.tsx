@@ -9,7 +9,7 @@ export default function NewsletterSubscribe(props: NewsletterFormProps) {
 
   return (
     <MailchimpSubscribe
-      url={ MAILCHIMP_URL }
+      url={ MAILCHIMP_URL! }
       render={ ( { subscribe, status, message } ) => {
         return (
           <NewsletterForm

@@ -33,7 +33,7 @@ export default function NewsletterForm({status, message, onValidated, ...props}:
 
     const [FNAME, LNAME] = name.split(" ")
 
-    let formData: {[key: string]: any} = { EMAIL: email, FNAME, LNAME }
+    let formData: {EMAIL: string, LNAME?: string, FNAME?: string, [key: string]: any} = { EMAIL: email, FNAME, LNAME }
     formData[MAILCHIMP_ANTIBOT_KEY] = ""
     const isFormValidated = onValidated(formData);
 

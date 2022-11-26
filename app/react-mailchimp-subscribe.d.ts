@@ -4,7 +4,7 @@ type FormData = {
 }
 interface IProps {
   url: string;
-  render: (props: { subscribe: (formData: FormData) => void, status: Status, message: string }) => React.ReactNode;
+  render: (props: { subscribe: (formData: FormData) => boolean, status: Status, message: string }) => React.ReactNode;
 }
 
 declare module 'react-mailchimp-subscribe' {

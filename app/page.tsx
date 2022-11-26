@@ -7,6 +7,7 @@ import Footer from './Footer'
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
   subsets: ['latin'],
+  variable: '--font-space-mono',
 })
 
 const data = {
@@ -16,7 +17,7 @@ const data = {
 export default function Home() {
   const links = [{href: "https://discord.gg/uvFsFtqgBG", content: "discord"}]
   return (
-    <div className={`bg-[#161414] ${spaceMono.className}`}>
+    <div className={`bg-[#161414] ${spaceMono.variable}`}>
       <Hero links={links} />
       <BinaryHR />
 

@@ -10,15 +10,19 @@ const spaceMono = Space_Mono({
   variable: '--font-space-mono',
 })
 
-const data = {
+export const copy = {
+  title0: "Arch Lunar",
+  title1: "Art Archive",
+  subtitle: "The first ever global contemporary art archive on the moon.",
   footer: "The first ever global contemporary art archive on the moon.",
+  heroImg: "",
 }
 
 export default function Home() {
   const links = [{href: "https://discord.gg/uvFsFtqgBG", content: "discord"}]
   return (
     <div className={`bg-[#161414] ${spaceMono.variable}`}>
-      <Hero links={links} />
+      <Hero title0={copy.title0} title1={copy.title1} subtitle={copy.subtitle} links={links} />
       <BinaryHR />
 
       <section className="container mx-auto">
@@ -39,7 +43,7 @@ export default function Home() {
 
       <BinaryHR />
 
-      <Footer motto={data.footer} links={links}/>
+      <Footer motto={copy.footer} links={links}/>
     </div>
   )
 }

@@ -14,8 +14,8 @@ export default function Footer(props: FooterProps) {
             <img src="/logo.svg" alt="Logo" className="" />
           </div>
           <div className="font-bold uppercase space-x-16 [&>*:hover]:font-normal">
-            {props.links.map(({content, ...linkProps}) => (
-              <Link className={styles.surroundParens} {...linkProps}>{content}</Link>
+            {props.links.map(({content, ...linkProps}, i) => (
+              <Link key={i} className={styles.surroundParens} {...linkProps}>{content}</Link>
             ))}
           </div>
           <div className="max-w-[416px] mx-auto my-4 uppercase">{props.motto}</div>

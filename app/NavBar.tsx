@@ -12,8 +12,8 @@ export default function NavBar(props: NavBarProps) {
 
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="flex flex-col py-4 text-right text-white md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium space-x-4 [&>*:hover]:font-normal uppercase">
-            {props.links.map(({content, ...linkProps}) => (
-              <li>
+            {props.links.map(({content, ...linkProps}, i) => (
+              <li key={i}>
                 <Link className={styles.surroundParens} {...linkProps}>{content}</Link>
               </li>
             ))}

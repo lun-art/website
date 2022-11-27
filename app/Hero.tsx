@@ -20,6 +20,7 @@ export default function Hero(props: HeroProps) {
         style={{
           objectFit: 'cover',
         }}
+        priority
       />
       <div className="absolute w-full h-full top-0 left-0 [background:linear-gradient(0deg,_rgba(32,_30,_30,_.05),_rgba(32,_30,_30,_0.5)),linear-gradient(0deg,_rgba(37,_35,_35,_1),_rgba(196,_196,_196,_0)_64%,_rgba(37,_35,_35,_1))]" />
 

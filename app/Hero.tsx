@@ -41,7 +41,7 @@ export default function Hero(props: HeroProps) {
 
 Hero.defaultProps = {
   title0: "Arch Lunar",
-  title1: "Arch Archive",
+  title1: "Art Archive",
   subtitle: "The first ever global contemporary art archive on the moon.",
   links: []
 };

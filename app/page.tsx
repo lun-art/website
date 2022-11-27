@@ -22,15 +22,15 @@ export default function Home() {
       <BinaryHR />
 
       <section className="container mx-auto">
-        <div className="items-center m-8 text-white divide-x grid md:grid-cols-2">
+        <div className="items-center mx-8 text-white md:my-8 md:divide-x grid md:grid-cols-2">
           <AboutBlock title="ARCH MISSION" desc="The Arch Lunar Art Archive is an extension of the Arch Mission Foundation’s commitment to document and preserve human culture around the solar system.  In 2019, Arch Mission deployed cutting-edge nanotechnology to send the largest library of human civilization into space via lunar lander." type="TYPE" index={"01"} />
-          <AboutBlock title="BLOCKTAG" type="TYPE1" index={"02"} desc="Blocktag™ technology is used to bring physical objects into digital worlds, and digital items into the physical world." />
+          <AboutBlock className="border-l md:border-l-0" title="BLOCKTAG" type="TYPE1" index={"02"} desc="Blocktag™ technology is used to bring physical objects into digital worlds, and digital items into the physical world." />
         </div>
 
-        <hr className="mx-12"/>
+        <hr className="hidden mx-12 sm:block"/>
 
-        <div className="items-center m-8 text-white divide-x grid md:grid-cols-2">
-          <AboutBlock title="NANOFICHE" type="TYPE2" index={"03"} desc="Nanofiche is a new analog archival preservation media that overcomes the limitations of existing technologies. 
+        <div className="items-center mx-8 text-white md:my-8 md:divide-x grid md:grid-cols-2">
+          <AboutBlock className="border-r md:border-r-0" title="NANOFICHE" type="TYPE2" index={"03"} desc="Nanofiche is a new analog archival preservation media that overcomes the limitations of existing technologies. 
 
             Unlike other alternatives, nickel-based Nanofiche never degrades and never has to be replaced."/>
           <AboutBlock title="NFT BLOCKCHAIN" type="TYPE3" index={"04"} desc="Every single piece of art is permanently bound to a record on a globally accessible, eco-friendly, and secure ledger that tracks provenance, authenticity, and ownership across space and time." />

@@ -1,14 +1,13 @@
-import Image from 'next/image'
 import Link, {LinkProps} from 'next/link'
 import styles from './page.module.css'
 
 export default function NavBar(props: NavBarProps) {
   return (
-    <nav className="container py-6 mx-auto sm:px-12">
+    <nav className="container px-6 py-6 mx-auto md:px-12">
       <div className="flex flex-wrap items-center justify-between">
-        <a href="" className="flex items-center">
-          <Image src="/alaa_logo.svg" width="64" height="64" alt="ALAA Logo" className="h-6 mr-3 sm:h-9"/>
-          <Image src="/logo.svg" width="64" height="64" alt="Logo"/>
+        <a href="" className="inline-flex items-center">
+          <img src="/alaa_logo.svg" alt="ALAA Logo" className="mr-3" />
+          <img src="/logo.svg" alt="Logo" className="" />
         </a>
 
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">

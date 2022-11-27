@@ -1,5 +1,4 @@
 import Link, {LinkProps} from 'next/link'
-import Image from 'next/image'
 import styles from './page.module.css'
 
 export default function Footer(props: FooterProps) {
@@ -10,9 +9,9 @@ export default function Footer(props: FooterProps) {
 
       <section className={`w-full mx-auto text-center text-white text-xs py-6`}>
         <i className={`w-full mx-auto my-6 ${styles.cross}`}></i>
-        <div className="flex justify-center my-12">
-          <Image src="/alaa_logo.svg" width="64" height="64" alt="ALAA Logo" className="h-6 mr-3 sm:h-9"/>
-          <Image src="/logo.svg" width="64" height="64" alt="Logo"/>
+        <div className="inline-flex items-center my-12">
+          <img src="/alaa_logo.svg" alt="ALAA Logo" className="mr-3" />
+          <img src="/logo.svg" alt="Logo" className="" />
         </div>
         <div className="font-bold uppercase space-x-16 [&>*:hover]:font-normal">
           {props.links.map(({content, ...linkProps}) => (

@@ -21,7 +21,7 @@ export const copy = {
 export default function Home() {
   const links = [{href: "https://discord.gg/uvFsFtqgBG", content: "discord"}]
   return (
-    <div className={`bg-[#161414] ${spaceMono.variable}`}>
+    <div className={`bg-[#161414] ${spaceMono.variable} font-mono`}>
       <Hero title0={copy.title0} title1={copy.title1} subtitle={copy.subtitle} links={links} />
       <BinaryHR />
 

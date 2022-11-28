@@ -38,8 +38,8 @@ export default function Hero(props: HeroProps) {
                   <img src="/logo.svg" alt="Logo" className="self-center h-[0.7em] mx-4 mb-[-.1em]" />
                 </span>
               </h1>
-              <p className={`text-[17px]`}>
-                {props.subtitle}
+              <p className={`text-[17px] xl:w-1/2`}>
+                {props.description}
               </p>
             </div>
           </div>
@@ -57,13 +57,13 @@ export default function Hero(props: HeroProps) {
 Hero.defaultProps = {
   title0: "Arch Lunar",
   title1: "Art Archive",
-  subtitle: "The first ever global contemporary art archive on the moon.",
+  description: "The first ever global contemporary art archive on the moon.",
   links: []
 };
 
 interface HeroProps {
   title0: string;
   title1: string;
-  subtitle: string;
+  description: string;
   links: Array<LinkProps & { content: string }>;
 }

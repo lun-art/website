@@ -13,7 +13,7 @@ const spaceMono = Space_Mono({
 export const copy = {
   title0: "Arch Lunar",
   title1: "Art Archive",
-  subtitle: "The first ever global contemporary art archive on the moon.",
+  description: "An extension of Arch Mission’s commitment to preserve human culture in outer space, this archive represents a snapshot of contemporary art in the year 2022, a time capsule containing responses to the moment by a diverse yet interconnected group of artists.",
   footer: "The first ever global contemporary art archive on the moon.",
   heroImg: "",
 }
@@ -22,7 +22,7 @@ export default function Home() {
   const links = [{href: "https://discord.gg/uvFsFtqgBG", content: "discord"}]
   return (
     <div className={`bg-[#161414] ${spaceMono.variable} font-mono`}>
-      <Hero title0={copy.title0} title1={copy.title1} subtitle={copy.subtitle} links={links} />
+      <Hero title0={copy.title0} title1={copy.title1} description={copy.description} links={links} />
       <BinaryHR />
 
       <section className="container mx-auto">

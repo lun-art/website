@@ -37,7 +37,7 @@ export default function Home() {
           <AboutBlock className="border-r md:border-r-0" title="NANOFICHE" type="TYPE2" index={"03"} desc="Nanofiche is a new analog archival preservation media that overcomes the limitations of existing technologies. 
 
             Unlike other alternatives, nickel-based Nanofiche never degrades and never has to be replaced."/>
-          <AboutBlock title="NFT BLOCKCHAIN" type="TYPE3" index={"04"} desc="Every single piece of art is permanently bound to a record on a globally accessible, eco-friendly, and secure ledger that tracks provenance, authenticity, and ownership across space and time." />
+          <AboutBlock title="BLOCKCHAIN" type="TYPE3" index={"04"} desc="Every single piece of art is permanently bound to a record on a globally accessible, eco-friendly, and secure ledger that tracks provenance, authenticity, and ownership across space and time." />
         </div>
       </section>
 

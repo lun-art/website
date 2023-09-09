@@ -6,7 +6,6 @@ export default function NavBar(props: NavBarProps) {
     <nav className={`container px-6 py-6 mx-auto md:px-12 ${props.className}`}>
       <div className="flex flex-wrap items-center justify-between">
         <a href="" className="inline-flex items-center">
-          <img src="/alaa_logo.svg" alt="ALAA Logo" className="mr-3" />
           <img src="/logo.svg" alt="Logo" className="" />
         </a>
 

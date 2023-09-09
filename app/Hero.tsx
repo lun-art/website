@@ -35,7 +35,7 @@ export default function Hero(props: HeroProps) {
                 <br />
                 <span className="inline-flex items-baseline font-sans">
                   {props.title1}
-                  <img src="/logo.svg" alt="Logo" className="self-center h-[0.7em] mx-4 mb-[-.1em]" />
+                  {/*<img src="/logo.svg" alt="Logo" className="self-center h-[0.7em] mx-4 mb-[-.1em]" />*/}
                 </span>
               </h1>
               <p className={`text-[17px] xl:w-1/2`}>

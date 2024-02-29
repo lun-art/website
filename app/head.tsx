@@ -1,4 +1,4 @@
-import {copy} from "./page"
+import copy from "./copy"
 import heroImg from '../public/PIA12936.jpg'
 import logo from '../public/logo.svg'
 

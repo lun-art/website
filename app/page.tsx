@@ -24,6 +24,7 @@ export const copy = {
     "Alex Seton",
     "Alice Wang",
     "Allen Hung-Lun Chen",
+    "Allie Zhang",
     "Amalia Ulman",
     "Anarchy Dance Theatre",
     "Andreas Rønholt Schmidt",

@@ -100,7 +100,6 @@ export const copy = {
     "Lindsay Lawson",
     "Liya Yu",
     "Liz Magic Lazer",
-    "Los Danger Horse",
     "Louie Shirase",
     "Luis Serrano",
     "Maria Petschnig",

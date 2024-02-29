@@ -11,7 +11,7 @@ export default function Footer(props: FooterProps) {
         <section className={`w-full mx-auto text-center text-white text-xs py-6`}>
           <i className={`w-full mx-auto my-6 ${styles.cross}`}></i>
           <div className="inline-flex items-center my-12">
-            <Image src="/logo.svg" alt="Logo" className="" />
+            <Image src="/logo.svg" alt="Logo" width={50} height={50} className="" />
           </div>
           <div className="font-bold uppercase space-x-16 [&>*:hover]:font-normal">
             {props.links.map(({ content, ...linkProps }, i) => (

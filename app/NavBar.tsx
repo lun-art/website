@@ -7,7 +7,7 @@ export default function NavBar(props: NavBarProps) {
     <nav className={`container px-6 py-6 mx-auto md:px-12 ${props.className}`}>
       <div className="flex flex-wrap items-center justify-between">
         <a href="" className="inline-flex items-center">
-          <Image src="/logo.svg" alt="Logo" className="" />
+          <Image src="/logo.svg" width={50} height={50} alt="Logo" className="" />
         </a>
 
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">

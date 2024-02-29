@@ -1,4 +1,4 @@
-import { Space_Mono } from '@next/font/google'
+import { Space_Mono } from "next/font/google"
 import Hero from './Hero'
 import BinaryHR from './BinaryHR'
 import AboutBlock from './AboutBlock'

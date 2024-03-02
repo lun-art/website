@@ -12,7 +12,13 @@ const spaceMono = Space_Mono({
 })
 
 export default function Home() {
-  const links = [{ href: "https://discord.gg/uvFsFtqgBG", content: "discord" }]
+  const links = [
+    { href: "https://www.archmission.org/", content: "arch mission" },
+    { href: "https://x.com/arch_lunar", content: "x" },
+    { href: "https://instagram/arch_lunar_art_archive", content: "instagram" },
+    { href: "https://warpcast.com/art-archive", content: "farcaster" },
+    { href: "https://discord.gg/uvFsFtqgBG", content: "discord" },
+  ]
   return (
     <div className={`bg-[#161414] ${spaceMono.variable} font-mono`}>
       <Hero title0={copy.title0} title1={copy.title1} description={copy.description} links={links} />

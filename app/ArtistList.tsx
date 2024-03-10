@@ -1,4 +1,3 @@
-import Papa from 'papaparse'
 import Link from 'next/link'
 
 export default function ArtistList(props: ArtistListProps) {
@@ -25,8 +24,11 @@ interface ArtistListProps {
 }
 
 
-interface ArtistData {
+export interface ArtistData {
     slug: string;
     name: string;
+    title?: string;
+    description?: string;
+    works?: string;
     // Add more properties here as per CSV columns
 }

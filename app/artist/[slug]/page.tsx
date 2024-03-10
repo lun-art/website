@@ -1,8 +1,9 @@
 import Papa from 'papaparse'
 import type { Metadata, ResolvingMetadata } from 'next'
+import Image from 'next/image'
 import NavBar from "../../NavBar";
-import BinaryHR from '../../BinaryHR';
 import styles from '../../page.module.css'
+import { ArtistData } from '../../ArtistList';
 
 const dataUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSxtJtC0h6tJQxMd35cSpWTCOnhFITwadMAC_0O_5EsdqxmXVYApIY3VHoePh3ZpZf6Nqaqo_4qRwsL/pub?gid=0&single=true&output=csv'
 
@@ -11,17 +12,20 @@ type Props = {
     searchParams: { [key: string]: string | string[] | undefined }
 }
 
+// show 404 if not found
+export const dynamicParams = false;
+
 export async function generateMetadata(
-    { params, searchParams }: Props,
+    { params }: Props,
     parent: ResolvingMetadata
 ): Promise<Metadata> {
     const data = await fetchDataForSlug(params.slug)
 
     // optionally access and extend (rather than replace) parent metadata
-    const previousImages = (await parent).openGraph?.images || []
+    // const previousImages = (await parent).openGraph?.images || []
 
     return {
-        title: data.name,
+        title: data?.name,
         //openGraph: {
         //    images: ['/some-specific-page-image.jpg', ...previousImages],
         //},
@@ -32,7 +36,7 @@ export async function generateStaticParams() {
     const response = await fetch(dataUrl);
     const csvData = await response.text();
 
-    const parsedData = Papa.parse(csvData, { header: true });
+    const parsedData = Papa.parse<ArtistData>(csvData, { header: true });
     const data = parsedData.data.map((row) => {
         return {
             slug: row.slug,
@@ -44,23 +48,23 @@ export async function generateStaticParams() {
 
 export default async function Page({ params, searchParams }: Props) {
     const data = await fetchDataForSlug(params.slug)
+
+    if (!data) {
+        return <></>
+    }
+
     return (
         <>
             <NavBar className="relative" />
 
             <ArtistHero {...data} />
 
-            <ListWorks works={data.works} />
+            <ListWorks works={data.works || ''} />
         </>
     )
 }
 
-function ArtistHero({ name, title, description }: {
-    name: string;
-    title: string;
-    description: string;
-    works: string;
-}): JSX.Element {
+function ArtistHero({ name, title, description }: ArtistData): JSX.Element {
     return (
         <section className="relative pb-12">
             <div className="absolute w-full h-full top-0 left-0 [background:linear-gradient(0deg,_rgba(32,_30,_30,_.05),_rgba(32,_30,_30,_0.5)),linear-gradient(0deg,_rgba(37,_35,_35,_1),_rgba(196,_196,_196,_0)_64%,_rgba(37,_35,_35,_1))]" />
@@ -111,7 +115,7 @@ function ListWorks({ works }: { works: string; }): JSX.Element {
         <section className="grid grid-cols-3 gap-4 p-4"> {/* Adjust the grid styling as needed */}
             {worksArray.map((work, index) => (
                 <div key={index} className="artwork-item"> {/* Add specific styles to artwork-item as needed */}
-                    <img src={work.imageLink} alt={`${work.title} by ${work.name}`} className="w-full" />
+                    <Image src={work.imageLink} alt={`${work.title} by ${work.name}`} className="w-full" />
                     <h3 className="text-center">{work.title}</h3>
                     <p className="text-center">{work.name}</p>
                 </div>
@@ -124,10 +128,8 @@ async function fetchDataForSlug(slug: string) {
     // Fetch the CSV data and find the row with the given slug
     const response = await fetch(dataUrl);
     const csvData = await response.text();
-    const parsedData = Papa.parse(csvData, { header: true });
+    const parsedData = Papa.parse<ArtistData>(csvData, { header: true });
 
     // Find the data for the given slug
-    const rowData = parsedData.data.find(row => row.slug === slug);
-
-    return rowData || null;
+    return parsedData.data.find(row => row.slug === slug);
 }

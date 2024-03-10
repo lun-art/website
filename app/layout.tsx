@@ -3,6 +3,7 @@ import { GoogleTagManager } from '@next/third-parties/google'
 import './globals.css'
 import copy from './copy'
 import heroImg from '../public/PIA12936.jpg'
+import Footer from './Footer'
 
 export const metadata: Metadata = {
   title: {
@@ -37,7 +38,11 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body className={`bg-[#161414] text-white`}>
+        {children}
+        <Footer motto={copy.footer} links={copy.links} />
+
+      </body>
       <GoogleTagManager gtmId="GTM-PK2ML5FB" />
     </html>
   )

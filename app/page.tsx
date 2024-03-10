@@ -1,8 +1,9 @@
 import { Space_Mono } from "next/font/google"
+import Papa from 'papaparse'
 import Hero from './Hero'
 import BinaryHR from './BinaryHR'
 import AboutBlock from './AboutBlock'
-import Footer from './Footer'
+import ArtistList from './ArtistList'
 import copy from './copy'
 
 const spaceMono = Space_Mono({
@@ -11,7 +12,7 @@ const spaceMono = Space_Mono({
   variable: '--font-space-mono',
 })
 
-export default function Home() {
+export default async function Home() {
   const links = [
     { href: "https://www.archmission.org/", content: "arch mission" },
     { href: "https://x.com/arch_lunar", content: "x" },
@@ -19,17 +20,17 @@ export default function Home() {
     { href: "https://warpcast.com/art-archive", content: "farcaster" },
     { href: "https://discord.gg/uvFsFtqgBG", content: "discord" },
   ]
+  const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSxtJtC0h6tJQxMd35cSpWTCOnhFITwadMAC_0O_5EsdqxmXVYApIY3VHoePh3ZpZf6Nqaqo_4qRwsL/pub?gid=0&single=true&output=csv');
+  const csvData = await response.text();
+  const parsedData = Papa.parse(csvData, { header: true });
+  const data = parsedData.data
+
   return (
     <div className={`bg-[#161414] ${spaceMono.variable} font-mono`}>
       <Hero title0={copy.title0} title1={copy.title1} description={copy.description} links={links} />
 
-      <section className="container mx-auto">
-        <div className="items-center mx-12 text-white md:my-8 grid md:grid-cols-3 text-xs">
-          {copy.artists.map((artist, i) => (
-            <div key={i} className="flex justify-center">{artist}</div>
-          ))}
-        </div>
-      </section>
+      <ArtistList artists={data} />
+
       <BinaryHR />
 
       <section className="container mx-auto">
@@ -49,8 +50,6 @@ export default function Home() {
       </section>
 
       <BinaryHR />
-
-      <Footer motto={copy.footer} links={links} />
     </div>
   )
 }

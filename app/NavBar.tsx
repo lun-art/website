@@ -1,14 +1,15 @@
 import Link, { LinkProps } from 'next/link'
 import Image from 'next/image'
 import styles from './page.module.css'
+import copy from './copy'
 
 export default function NavBar(props: NavBarProps) {
   return (
     <nav className={`container px-6 py-6 mx-auto md:px-12 ${props.className}`}>
       <div className="flex flex-wrap items-center justify-between">
-        <a href="" className="inline-flex items-center">
+        <Link href="/" className="inline-flex items-center">
           <Image src="/logo.svg" width={50} height={50} alt="Logo" className="" />
-        </a>
+        </Link>
 
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="flex flex-col py-4 text-right text-white md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium space-x-4 [&>*:hover]:font-normal uppercase last:mr-[-20px]">
@@ -25,7 +26,7 @@ export default function NavBar(props: NavBarProps) {
 }
 
 NavBar.defaultProps = {
-  links: []
+  links: copy.links
 }
 
 interface NavBarProps {

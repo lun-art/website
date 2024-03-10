@@ -4,6 +4,13 @@ const copy = {
     description: "An extension of Arch Mission’s commitment to preserve human culture in outer space, this archive represents a snapshot of contemporary art in the year 2022, a time capsule containing responses to the moment by a diverse yet interconnected group of artists.",
     footer: "The first ever global contemporary art archive on the moon.",
     heroImg: "",
+    links: [
+        { href: "https://www.archmission.org/", content: "arch mission" },
+        { href: "https://x.com/arch_lunar", content: "x" },
+        { href: "https://instagram/arch_lunar_art_archive", content: "instagram" },
+        { href: "https://warpcast.com/art-archive", content: "farcaster" },
+        { href: "https://discord.gg/uvFsFtqgBG", content: "discord" },
+    ],
     artists: [
         "Aaron Naves ",
         "Adrian Pijoan",

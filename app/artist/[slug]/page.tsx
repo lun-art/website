@@ -46,7 +46,7 @@ export async function generateStaticParams() {
     return data
 }
 
-export default async function Page({ params, searchParams }: Props) {
+export default async function Page({ params }: Props) {
     const data = await fetchDataForSlug(params.slug)
 
     if (!data) {

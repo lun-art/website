@@ -7,7 +7,7 @@ const copy = {
     links: [
         { href: "https://www.archmission.org/", content: "arch mission" },
         { href: "https://x.com/arch_lunar", content: "x" },
-        { href: "https://instagram/arch_lunar_art_archive", content: "instagram" },
+        { href: "https://instagram.com/arch_lunar_art_archive", content: "instagram" },
         { href: "https://warpcast.com/art-archive", content: "farcaster" },
         { href: "https://discord.gg/uvFsFtqgBG", content: "discord" },
     ],

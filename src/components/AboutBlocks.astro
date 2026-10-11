@@ -16,14 +16,20 @@ const marks = ["×", "+"];
   {rows.map((row, r) => (
     <>
       {r > 0 && <hr class="mx-12 hidden sm:block" />}
-      <div class="mx-8 grid items-center md:my-8 md:grid-cols-2 md:divide-x">
+      <div class="mx-8 grid items-center md:my-8 md:grid-cols-2">
         {row.map((block, i) => {
           const index = r * 2 + i;
           const top = r % 2 === 0;
+          // From md up, a rule between the two columns of every row: the
+          // second block's left border (not divide-x, whose Tailwind 4 border
+          // sits on the first block, where the mobile border-r-0 cancels it).
+          // Below md, alternate side borders, as in the original design.
           const side =
-            r % 2 === 0
-              ? i === 1 && "border-l md:border-l-0"
-              : i === 0 && "border-r md:border-r-0";
+            i === 1
+              ? top
+                ? "border-l"
+                : "md:border-l"
+              : !top && "border-r md:border-r-0";
           return (
             <div class:list={["relative border-b p-4 md:border-b-0", side]}>
               <h2 class="font-block text-left text-[42px] font-normal uppercase">

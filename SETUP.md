@@ -86,7 +86,6 @@ The `builds` step creates these. To set them by hand: Worker > Settings > Builds
 | `RESEND_FROM`                           | secret | –                       | –                                    | at launch     | –                           | e.g. `Client <hello@client.example>` |
 | `CONTACT_NOTIFY_EMAIL`                  | secret | –                       | –                                    | at launch     | –                           | the client                           |
 | `RESEND_SEGMENT_ID`                     | secret | –                       | –                                    | at launch     | –                           | Resend > Audience > Segments         |
-| `PUBLIC_GTM_ID`                         | public | empty (off)             | `GTM-PK2ML5FB`                       | –             | blanked                     | Google Tag Manager                   |
 | `SANITY_SEED_FILE`                      | local  | until Sanity is set up  | –                                    | –             | set in the build step       | `sanity/seed/content.ndjson`         |
 | `E2E_SANITY_WRITE_TOKEN`                | secret | –                       | –                                    | –             | Actions secret              | Sanity Editor token                  |
 

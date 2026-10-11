@@ -8,8 +8,6 @@ instead.
 ## This site's exceptions to the template
 
 - **No Talasi credit** in the footer, by the owner's choice (2026-10-11).
-- **Google Tag Manager** runs beside PostHog (`PUBLIC_GTM_ID`, `src/components/TagManager.astro`).
-  It sets cookies, so the "no consent banner" note under Analytics doesn't hold while it's on.
 - **Newsletter:** `worker/newsletter.ts` adds sign-ups to a Resend segment (`/api/newsletter`).
 - **Seed content:** until the Sanity project ID is in `.env.production`, build with
   `SANITY_SEED_FILE=sanity/seed/content.ndjson`. `scripts/build-seed.mjs` makes it from the old

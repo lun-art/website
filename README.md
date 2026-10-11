@@ -25,7 +25,7 @@ SANITY_SEED_FILE=sanity/seed/content.ndjson npm run build
 | Images          | Sanity image CDN with `srcset`. Nothing is transformed at request time                                 |
 | Hosting         | Cloudflare Workers static assets on the free plan. The Worker runs only for `/api/*`                   |
 | Forms           | Contact and newsletter: Worker endpoints that call Resend's REST API. Work without JavaScript          |
-| Analytics       | PostHog (cookieless) and Google Tag Manager, each off until its ID is set                              |
+| Analytics       | PostHog, cookieless, off until its key is set                                                          |
 | Tests           | Vitest unit tests; Playwright smoke tests on `wrangler dev` with a mock Resend                         |
 | CI              | Lint, types, unit, build and e2e on every PR                                                           |
 | Updates         | Renovate weekly: grouped minor/patch automerge on green CI, majors as separate PRs                     |

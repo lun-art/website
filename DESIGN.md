@@ -16,7 +16,7 @@ approved direction.
 - **Must-have features:** artist list, one page per artist at `/artist/<slug>` (URLs kept from
   the old site), newsletter sign-up, contact form.
 - **Integrations:** Sanity (content), Resend (newsletter segment and contact email), PostHog
-  (cookieless) and Google Tag Manager (`GTM-PK2ML5FB`, kept from the old site).
+  (cookieless). The old site's Google Tag Manager was dropped, so no cookie banner is needed.
 - **Owner contact and channel:** Allie.
 
 ## 2. Content map

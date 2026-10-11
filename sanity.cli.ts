@@ -7,4 +7,5 @@ export default defineCliConfig({
   },
   // scripts/provision.sh sets this to the client slug.
   studioHost: "lun-art",
+  deployment: { appId: "v0g9bh5p3sk0tarhjfrv9go7" },
 });

@@ -247,15 +247,17 @@ step_sanity() {
 }
 
 step_email() {
-  need RESEND_API_KEY RESEND_FROM CONTACT_NOTIFY_EMAIL
-  say "email: Resend secrets for the contact form (launch only)"
+  need RESEND_API_KEY RESEND_FROM CONTACT_NOTIFY_EMAIL RESEND_SEGMENT_ID
+  say "email: Resend secrets for the contact form and newsletter (launch only)"
   echo "  Previews share these secrets, so set them only when the site launches."
-  confirm "Set RESEND_API_KEY, RESEND_FROM and CONTACT_NOTIFY_EMAIL as Worker secrets?" || return 0
+  confirm "Set RESEND_API_KEY, RESEND_FROM, CONTACT_NOTIFY_EMAIL and RESEND_SEGMENT_ID as Worker secrets?" || return 0
   if $DRY_RUN; then
     run npx wrangler secret bulk "<json>"
   else
     jq -n --arg a "$RESEND_API_KEY" --arg b "$RESEND_FROM" --arg c "$CONTACT_NOTIFY_EMAIL" \
-      '{RESEND_API_KEY: $a, RESEND_FROM: $b, CONTACT_NOTIFY_EMAIL: $c}' | npx wrangler secret bulk
+      --arg d "$RESEND_SEGMENT_ID" \
+      '{RESEND_API_KEY: $a, RESEND_FROM: $b, CONTACT_NOTIFY_EMAIL: $c, RESEND_SEGMENT_ID: $d}' |
+      npx wrangler secret bulk
   fi
 }
 

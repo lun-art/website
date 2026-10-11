@@ -1,110 +1,117 @@
-# Design spec: [SITE NAME]
+# Design spec: Arch Lunar Art Archive
 
-Status: draft
-<!-- Change to "Status: approved" only when the client signs off (see Sign-off). AGENTS.md
-forbids styling pages or building layout while this says draft. -->
+Status: approved
 
-Fill this in top to bottom. Use placeholders such as `[EMAIL]`, `[PHONE]` and `[ADDRESS]` for
-anything that lives in the CMS, in mockups as well as here.
+This site was moved from Next.js to the Talasi Astro template in October 2026. The design is a
+1:1 port of the live lun.art design, so there were no design rounds: the live site was the
+approved direction.
 
 ## 1. Brief
 
-- **Business:** what they do, for whom, where.
-- **Audience:** who visits and what they came to do.
-- **Languages:** `en` only, unless the client really needs more. Each extra locale needs a named
-  reviewer.
-- **Must-have features:**
-- **Integrations:**
-- **Owner contact and channel:**
+- **Business:** the Arch Lunar Art Archive, an extension of the Arch Mission Foundation: a
+  snapshot of contemporary art from 2022, preserved on the moon.
+- **Audience:** artists in the archive, collectors, press, and people curious about art in
+  space. They come to browse the artists and to sign up for news.
+- **Languages:** `en` only.
+- **Must-have features:** artist list, one page per artist at `/artist/<slug>` (URLs kept from
+  the old site), newsletter sign-up, contact form.
+- **Integrations:** Sanity (content), Resend (newsletter segment and contact email), PostHog
+  (cookieless) and Google Tag Manager (`GTM-PK2ML5FB`, kept from the old site).
+- **Owner contact and channel:** Allie.
 
 ## 2. Content map
 
-Every piece of content, and where it lives. Anything the client will ever change is CMS or DB.
-
-| Content                      | Lives in | Document or table          | Who edits      | Notes                       |
-| ---------------------------- | -------- | -------------------------- | -------------- | --------------------------- |
-| Site name, description, logo | CMS      | `siteSettings` (singleton) | Client / agent |                             |
-| Page copy                    | CMS      | `page`                     | Client / agent | slug `home` is the homepage |
-| Contact messages             | Email    | Resend, to the owner       | Site (form)    | not stored                  |
+| Content                            | Lives in | Document or table             | Who edits     | Notes                                            |
+| ---------------------------------- | -------- | ----------------------------- | ------------- | ------------------------------------------------ |
+| Site name, description, links      | CMS      | `siteSettings` (singleton)    | Owner / agent | `socialLinks` feed the header and footer         |
+| Footer line                        | CMS      | `siteSettings.footerMotto`    | Owner / agent |                                                  |
+| Home title, intro, about blocks    | CMS      | `home` (singleton)            | Owner / agent | four about blocks fill the two-by-two grid       |
+| Artists                            | CMS      | `artist`                      | Owner / agent | imported from the old Google Sheet on 2026-10-11 |
+| Artwork images                     | CMS      | `artist.works[]`              | Owner / agent | none yet: the sheet never had any                |
+| Other pages                        | CMS      | `page`                        | Owner / agent | `/<slug>`; none yet                              |
+| Hero photograph                    | Code     | `src/assets/moon-surface.jpg` | Developer     | NASA PIA12936; a design asset, not content       |
+| Logo                               | Code     | `public/logo.svg`             | Developer     | the icons and `og.png` are drawn from it         |
+| UI strings (form labels, messages) | Code     | `src/i18n/en.json`            | Developer     |                                                  |
+| Newsletter sign-ups                | Resend   | the newsletter segment        | Site (form)   | not stored on the site                           |
+| Contact messages                   | Email    | Resend, to the owner          | Site (form)   | not stored                                       |
 
 ## 3. Data fields
 
-For each field: meaning, unit, and the rule for when the value is unknown.
-
-| Field | Meaning | Unit | When unknown |
-| ----- | ------- | ---- | ------------ |
-|       |         |      |              |
+| Field                   | Meaning                              | Unit       | When unknown                                          |
+| ----------------------- | ------------------------------------ | ---------- | ----------------------------------------------------- |
+| `artist.workTitle`      | The title of the work in the archive | text       | not shown                                             |
+| `artist.website`        | The artist's own site                | URL        | not shown                                             |
+| `artist.statement`      | Artist statement, line breaks kept   | text       | not shown; the description names the artist instead   |
+| `artist.seoDescription` | Search description                   | ≤160 chars | start of the statement, else a line naming the artist |
 
 ## 4. Brand sheet
 
-- **Name and tagline:**
-- **Logo:** source file, and the minimum size it stays legible at.
-- **Colours they have:**
-- **Type they have:**
-- **Sites they like, and why:**
-- **Sites they dislike, and why:**
-- **Domain status:**
+- **Name and tagline:** Arch Lunar Art Archive. "The first ever global contemporary art archive
+  on the moon."
+- **Logo:** `public/logo.svg`, a white crescent. Legible from 32 px.
+- **Colours they have:** near-black `#161414`, white, warm light grey `#E8E6E6`.
+- **Type they have:** Space Mono (self-hosted from `@fontsource/space-mono`), the system serif
+  for the display line, the system sans for the second title line and the footer, Helvetica
+  Neue for the about-block titles.
+- **Domain status:** lun.art, live.
 
 ## 5. Direction
 
-The chosen direction from the design rounds, and **why the client chose it** over the others.
-
-- Round 1 (directions): link to the artboards, and the choice made.
-- Round 2 (key screens, including mobile): link.
-- Round 3 (empty and error states): link.
+A port of the live site: a dark, archival look with crop marks around title boxes, a binary
+rule ("ABOUT" in binary) between sections, and links that gain `[ ]` brackets on hover.
 
 ## 6. Theme
 
-- [ ] Light only
-- [ ] Light plus a dark palette derived from it
-
-Contrast must be checked on real backgrounds, not swatches.
+- [x] Dark only (the original design)
 
 ## 7. Tokens
 
-These replace the placeholders in `src/app/globals.css`. Keep the role names.
+In `src/styles/global.css`.
 
-| Role                    | Token                        | Value | Notes                                 |
-| ----------------------- | ---------------------------- | ----- | ------------------------------------- |
-| Body text               | `--color-foreground`         |       |                                       |
-| Secondary text          | `--color-muted`              |       | contrast against background and panel |
-| Page background         | `--color-background`         |       |                                       |
-| Large panels            | `--color-panel`              |       |                                       |
-| Borders                 | `--color-border`             |       |                                       |
-| Filled controls         | `--color-primary`            |       |                                       |
-| Text on filled controls | `--color-primary-foreground` |       |                                       |
-| Errors                  | `--color-danger`             |       |                                       |
-| Success                 | `--color-success`            |       |                                       |
-| Body font               | `--font-sans`                |       | self-host the files in `public/fonts` |
-| Display font            | `--font-display`             |       |                                       |
+| Role                    | Token                        | Value          | Notes                                    |
+| ----------------------- | ---------------------------- | -------------- | ---------------------------------------- |
+| Body text               | `--color-foreground`         | `#ffffff`      |                                          |
+| Secondary text          | `--color-muted`              | `#e8e6e6`      | about-block text, binary rule, crosses   |
+| Page background         | `--color-background`         | `#161414`      |                                          |
+| Large panels            | `--color-panel`              | `#252323`      | the hero gradient's end colour           |
+| Borders                 | `--color-border`             | `#e5e7eb`      | Tailwind 3's default, as on the old site |
+| Filled controls         | `--color-primary`            | `#ffffff`      | buttons fill white on hover              |
+| Text on filled controls | `--color-primary-foreground` | `#000000`      |                                          |
+| Errors                  | `--color-danger`             | `#ff8a80`      | light, for the dark background           |
+| Success                 | `--color-success`            | `#b9f6ca`      |                                          |
+| Body font               | `--font-sans`                | system sans    |                                          |
+| Display font            | `--font-display`             | system serif   | the first title line                     |
+| Mono font               | `--font-mono`                | Space Mono     | the home page, the forms                 |
+| Block titles            | `--font-block`               | Helvetica Neue |                                          |
 
-Type scale, spacing scale, radii and shadows:
+Helper utilities: `border-corners` (crop marks), `cross` and `cross-vert` (footer marks),
+`bracket-link` (hover brackets, also on keyboard focus).
 
 ## 8. Components
 
-For each component: its variants, its states (default, hover, focus, disabled, loading, error),
-and accessibility notes.
-
-- Button
-- Field (input, textarea)
-- Form message
-- Header and navigation (desktop and mobile)
-- Footer, which keeps the Talasi credit
+- **Header:** logo and links. The links are hidden below `md`, as on the original site; the
+  footer carries them there.
+- **Footer:** crosses, logo, links in bold uppercase, the footer line. No agency credit.
+- **Newsletter form:** full name, email, "Inquire" button in a crop-mark frame. Labels are
+  visually hidden but present for screen readers. Works without JavaScript.
+- **Artist list:** three columns from `md`, one below. A thin border appears on hover.
+- **About blocks:** two per row, numbered, with × and + corner marks.
 
 ## 9. Page inventory
 
-Every page gets a drawing before it's built.
-
-| Page                                       | Desktop | Mobile | Empty state | Error state    |
-| ------------------------------------------ | ------- | ------ | ----------- | -------------- |
-| Home                                       |         |        |             |                |
-| CMS page                                   |         |        |             |                |
-| Contact                                    |         |        |             | sending failed |
-| Contact: sent / error (no-JS result pages) |         |        |             |                |
-| 404                                        |         |        |             |                |
+| Page                    | Desktop  | Mobile   | Empty state                 | Error state    |
+| ----------------------- | -------- | -------- | --------------------------- | -------------- |
+| Home                    | live     | live     | "Nothing published yet"     |                |
+| Artists (`/artist`)     | live     | live     | "No artists published yet." |                |
+| Artist                  | live     | live     | name only                   |                |
+| Contact                 | template | template |                             | sending failed |
+| Newsletter sent / error | new      | new      |                             | the error page |
+| 404                     | template | template |                             |                |
 
 ## 10. Sign-off
 
-Approved by: ______ on ______ (date), via ______ (channel).
+Approved by: Allie on 2026-10-11, via Claude Code chat, as a 1:1 port of the live lun.art
+design.
 
-After sign-off this document is the source of truth. Where code disagrees with it, the code changes.
+After sign-off this document is the source of truth. Where code disagrees with it, the code
+changes.

@@ -1,19 +1,26 @@
-# [SITE NAME] operations guide
+# Arch Lunar Art Archive operations guide
 
 A plain-English guide to running the site day to day. No coding needed. Write it as the site is
 built, not at the end.
 
 ## Editing content
 
-Go to `https://[STUDIO HOST].sanity.studio` and sign in with the account you were invited with.
+Go to `https://lun-art.sanity.studio` and sign in with the account you were invited with.
 
-- **Site settings:** the site name, tagline, description, logo, default social image, contact
-  email and social links.
-- **Pages:** each page has a title, an address (slug) and its content. The page with the address
-  `home` is the homepage. Tick "Show in navigation" to add a page to the menu.
+- **Site settings:** the site name, description, logo, default social image, contact email, the
+  footer line, and the links shown in the header and footer.
+- **Home page:** the two title lines, the introduction and the four numbered about blocks.
+- **Artists:** each artist has a name, an address (slug), the title of their work, their website,
+  their statement and images of the work. The page lives at `lun.art/artist/<slug>`. **Don't
+  change the slug of a live artist**: links to the old address would break.
+- **Pages:** extra pages at `lun.art/<slug>`. Tick "Show in navigation" to add one to the menu.
 
 **Publishing rebuilds the site.** Changes appear a few minutes after you press Publish, not
 instantly. Several publishes in a row are combined into one rebuild.
+
+## Newsletter sign-ups
+
+They join the newsletter segment in Resend (Audience). Send newsletters from Resend's Broadcasts.
 
 ## Messages from the contact form
 
@@ -28,7 +35,9 @@ come back as a preview link to check before they go live.
 
 Fixed IDs and keyed arrays, so content can be patched directly.
 
-| Document      | `_id`          | Fields                                                                                                                                     |
-| ------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Site settings | `siteSettings` | `siteName`, `tagline`, `description`, `logo{asset, alt}`, `defaultSeoImage{asset, alt}`, `contactEmail`, `socialLinks[{_key, label, url}]` |
-| Page          | generated      | `title`, `slug.current`, `body[]` (blocks and `imageWithAlt`), `showInNav`, `navOrder`, `seoDescription`, `seoImage`                       |
+| Document      | `_id`                                                        | Fields                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Site settings | `siteSettings`                                               | `siteName`, `tagline`, `description`, `logo{asset, alt}`, `defaultSeoImage{asset, alt}`, `contactEmail`, `footerMotto`, `socialLinks[{_key, label, url}]` |
+| Home page     | `home`                                                       | `titleLine1`, `titleLine2`, `intro`, `aboutBlocks[{_key, title, text}]`, `seoDescription`, `seoImage`                                                     |
+| Artist        | `artist-<slug>` for imported artists, generated for new ones | `name`, `slug.current`, `workTitle`, `website`, `statement`, `works[{_key, asset, alt}]`, `seoDescription`                                                |
+| Page          | generated                                                    | `title`, `slug.current`, `body[]` (blocks and `imageWithAlt`), `showInNav`, `navOrder`, `seoDescription`, `seoImage`                                      |

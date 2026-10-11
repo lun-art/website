@@ -5,6 +5,16 @@ have content edited in Sanity and no logins. Read this file before changing anyt
 needs logins, user submissions or admin review, the site belongs on the Next.js app template
 instead.
 
+## This site's exceptions to the template
+
+- **No Talasi credit** in the footer, by the owner's choice (2026-10-11).
+- **Google Tag Manager** runs beside PostHog (`PUBLIC_GTM_ID`, `src/components/TagManager.astro`).
+  It sets cookies, so the "no consent banner" note under Analytics doesn't hold while it's on.
+- **Newsletter:** `worker/newsletter.ts` adds sign-ups to a Resend segment (`/api/newsletter`).
+- **Seed content:** until the Sanity project ID is in `.env.production`, build with
+  `SANITY_SEED_FILE=sanity/seed/content.ndjson`. `scripts/build-seed.mjs` makes it from the old
+  Google Sheet export.
+
 ## Before you start
 
 - Read `README.md`, `SETUP.md`, `DESIGN.md` and `design/STATUS.md`.
@@ -76,7 +86,8 @@ Build in this order. Don't start a step until the one before it is done and reco
   pages and the 404 are `noindex` and stay out of the sitemap. `e2e/pages.spec.ts` checks the tags,
   images and JSON-LD, so add each new indexable route to `INDEXABLE` there. Descriptions come from
   the CMS, so check them before launch.
-- **The Talasi credit** stays in the footer.
+- **The Talasi credit** stays in the footer of client sites, except where the owner opted out
+  (this one did).
 
 ## Before you report a change as done
 

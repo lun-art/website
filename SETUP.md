@@ -85,6 +85,9 @@ The `builds` step creates these. To set them by hand: Worker > Settings > Builds
 | `RESEND_API_KEY`                        | secret | –                       | –                                    | at launch     | –                           | Resend                               |
 | `RESEND_FROM`                           | secret | –                       | –                                    | at launch     | –                           | e.g. `Client <hello@client.example>` |
 | `CONTACT_NOTIFY_EMAIL`                  | secret | –                       | –                                    | at launch     | –                           | the client                           |
+| `RESEND_SEGMENT_ID`                     | secret | –                       | –                                    | at launch     | –                           | Resend > Audience > Segments         |
+| `PUBLIC_GTM_ID`                         | public | empty (off)             | `GTM-PK2ML5FB`                       | –             | blanked                     | Google Tag Manager                   |
+| `SANITY_SEED_FILE`                      | local  | until Sanity is set up  | –                                    | –             | set in the build step       | `sanity/seed/content.ndjson`         |
 | `E2E_SANITY_WRITE_TOKEN`                | secret | –                       | –                                    | –             | Actions secret              | Sanity Editor token                  |
 
 - Until the email secrets are set, the contact form answers "couldn't be sent". Previews share
@@ -140,7 +143,29 @@ needs no route changes. To add one:
 3. Add its codes to `HREFLANG` and `OG_LOCALE` in `src/i18n/index.ts`.
 4. Translate the CMS content (localized fields in the schemas), and name a person to review it.
 
-## 9. Launch
+## 9. Moving off the old Next.js site
+
+The old site was Next.js on Cloudflare Pages, with artists in a Google Sheet and the newsletter in
+Mailchimp. In order:
+
+1. **Sanity.** Create the project, then load the seed (site settings, home page and the 134
+   artists from the sheet):
+
+   ```bash
+   npx sanity dataset import sanity/seed/content.ndjson production
+   ```
+
+   From then on Sanity is the source of truth; the sheet and the seed are history.
+
+2. **Provision** as in step 3 (`rename` is already done: the slug is `lun-art`).
+3. **Newsletter.** In Resend, create a segment for the newsletter. Export the audience from
+   Mailchimp as CSV and import it into that segment (Resend > Audience > Import, or
+   `POST /contacts/imports`). Keep the export somewhere private: it's personal data.
+4. **Preview** the Workers deploy on its `workers.dev` URL and check every page against lun.art.
+5. **Cut over.** Remove `lun.art` from the Cloudflare Pages project, add it to the Worker as a
+   custom domain, then delete the Pages project once the Worker serves the domain.
+
+## 10. Launch
 
 1. Move DNS to Cloudflare. Record the registrar's email forwarding first and recreate it in
    Cloudflare Email Routing.

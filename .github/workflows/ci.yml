@@ -51,8 +51,7 @@ jobs:
           cache: npm
       # Reproduces Workers Builds, which installs without peer dependencies.
       - run: npx npm@10.9.2 ci --legacy-peer-deps
-      # The seed stands in for Sanity until the project ID is in .env.production.
-      - run: SANITY_SEED_FILE=sanity/seed/content.ndjson npm run build
+      - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
       - uses: actions/upload-artifact@v7

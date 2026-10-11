@@ -1,0 +1,60 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":dependencyDashboard"],
+  "timezone": "Europe/Vienna",
+  "schedule": ["* 0-5 * * 1"],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 10,
+  "minimumReleaseAge": "3 days",
+  "rangeStrategy": "bump",
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "platformAutomerge": false,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["* 0-5 * * 1"],
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "description": "One weekly PR for every minor and patch update, merged by Renovate itself only once every CI check is green.",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchCurrentVersion": "!/^0/",
+      "groupName": "minor and patch updates",
+      "groupSlug": "minor-patch",
+      "automerge": true
+    },
+    {
+      "description": "0.x packages can break on a minor. Group them separately and review by hand.",
+      "matchUpdateTypes": ["minor"],
+      "matchCurrentVersion": "/^0/",
+      "groupName": "0.x minor updates",
+      "automerge": false
+    },
+    {
+      "description": "Majors get their own PR each and are never automerged.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "Astro packages move together.",
+      "matchPackageNames": ["astro", "@astrojs/**"],
+      "groupName": "Astro"
+    },
+    {
+      "description": "Sanity packages move together.",
+      "matchPackageNames": ["sanity", "@sanity/**"],
+      "groupName": "Sanity"
+    },
+    {
+      "description": "Types for Node follow the pinned Node major in .node-version.",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<25"
+    },
+    {
+      "description": "Held: typescript-eslint and @astrojs/check support TypeScript < 6.1 only. Lift when they support 7.",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<6.1"
+    }
+  ]
+}

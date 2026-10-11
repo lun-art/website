@@ -1,0 +1,51 @@
+---
+import { localePath, t, type Locale } from "@/i18n";
+import { navPagesQuery, sanityFetch, type SiteSettings } from "@/lib/sanity";
+
+type Props = {
+  locale: Locale;
+  links: NonNullable<SiteSettings["socialLinks"]>;
+  class?: string;
+};
+const { locale, links, class: className } = Astro.props;
+// CMS pages with "Show in navigation" ticked come first.
+const pages =
+  (await sanityFetch<Array<{ title: string; slug: string }>>(navPagesQuery)) ??
+  [];
+---
+
+<!-- The links are hidden on small screens, as on the original site; the
+     footer carries them there. -->
+<nav
+  aria-label={t(locale, "nav.primary")}
+  class:list={["container mx-auto px-6 py-6 md:px-12", className]}
+>
+  <div class="flex flex-wrap items-center justify-between">
+    <a href={localePath(locale, "/")} class="inline-flex items-center">
+      <img src="/logo.svg" width="50" height="50" alt={t(locale, "nav.home")} />
+    </a>
+    <div class="hidden w-full md:block md:w-auto">
+      <ul class="flex flex-col space-x-4 py-4 text-right uppercase md:mt-0 md:flex-row md:space-x-8 md:text-sm md:font-medium [&>*:hover]:font-normal">
+        {pages.map((page) => (
+          <li>
+            <a class="bracket-link" href={localePath(locale, `/${page.slug}`)}>
+              {page.title}
+            </a>
+          </li>
+        ))}
+        {links.map((link) => (
+          <li>
+            <a class="bracket-link" href={link.url}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a class="bracket-link" href={localePath(locale, "/contact")}>
+            {t(locale, "nav.contact")}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

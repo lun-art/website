@@ -1,0 +1,101 @@
+---
+import { Image } from "astro:assets";
+import AboutBlocks from "@/components/AboutBlocks.astro";
+import ArtistList from "@/components/ArtistList.astro";
+import BinaryHR from "@/components/BinaryHR.astro";
+import Header from "@/components/Header.astro";
+import NewsletterForm from "@/components/NewsletterForm.astro";
+import { localeStaticPaths, t, type Locale } from "@/i18n";
+import Base from "@/layouts/Base.astro";
+import {
+  artistListQuery,
+  homeQuery,
+  sanityFetch,
+  type ArtistSummary,
+  type Home,
+} from "@/lib/sanity";
+import { excerpt, getSiteSettings } from "@/lib/site";
+import moonSurface from "@/assets/moon-surface.jpg";
+
+export const getStaticPaths = localeStaticPaths;
+
+const { locale } = Astro.props as { locale: Locale };
+const [home, artists, settings] = await Promise.all([
+  sanityFetch<Home>(homeQuery),
+  sanityFetch<ArtistSummary[]>(artistListQuery),
+  getSiteSettings(),
+]);
+---
+
+<Base
+  locale={locale}
+  path="/"
+  description={home?.seoDescription ?? (home ? excerpt(home.intro) : undefined)}
+  image={home?.seoImage}
+  header={false}
+  mono
+>
+  <section class="relative pb-12">
+    <!-- A design asset (NASA photograph PIA12936), not CMS content. -->
+    <Image
+      src={moonSurface}
+      alt={t(locale, "home.heroAlt")}
+      widths={[640, 1200]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    <div class="absolute inset-0 [background:linear-gradient(0deg,_rgba(32,_30,_30,_.05),_rgba(32,_30,_30,_0.5)),linear-gradient(0deg,_rgba(37,_35,_35,_1),_rgba(196,_196,_196,_0)_64%,_rgba(37,_35,_35,_1))]"></div>
+
+    <Header
+      class="relative"
+      locale={locale}
+      links={settings?.socialLinks ?? []}
+    />
+
+    <div class="relative container mx-auto">
+      <div class="mx-6 md:mx-12">
+        <div class="border-corners text-left">
+          <div class="p-6 py-16 sm:pt-64">
+            {home ? (
+              <>
+                <h1 class="font-display mb-12 text-6xl font-extralight tracking-tight md:text-8xl lg:text-7xl xl:text-9xl">
+                  {home.titleLine1}
+                  {home.titleLine2 && (
+                    <>
+                      <br />
+                      <span class="inline-flex items-baseline font-sans">
+                        {home.titleLine2}
+                      </span>
+                    </>
+                  )}
+                </h1>
+                <p class="text-[17px] xl:w-1/2">{home.intro}</p>
+              </>
+            ) : (
+              <>
+                <h1 class="mb-6 text-3xl">{t(locale, "home.emptyTitle")}</h1>
+                <p>{t(locale, "home.emptyBody")}</p>
+              </>
+            )}
+          </div>
+        </div>
+
+        <hr class="relative mt-24" />
+
+        <h2 class="sr-only">{t(locale, "newsletter.title")}</h2>
+        <NewsletterForm locale={locale} class="relative mt-12" />
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sr-only">{t(locale, "artists.title")}</h2>
+  <ArtistList locale={locale} artists={artists ?? []} />
+
+  <BinaryHR />
+
+  {home?.aboutBlocks?.length && <AboutBlocks blocks={home.aboutBlocks} />}
+
+  <BinaryHR />
+</Base>

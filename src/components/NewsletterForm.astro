@@ -1,0 +1,124 @@
+---
+import { t, type Locale } from "@/i18n";
+
+type Props = { locale: Locale; class?: string };
+const { locale, class: className } = Astro.props;
+const field =
+  "block w-full rounded-none border-b border-white bg-transparent py-2.5 text-sm text-white placeholder:text-white/60 focus:border-blue-500";
+---
+
+<!-- Works without JavaScript (a normal POST answered with a redirect to
+     /newsletter/sent or /error); the script below submits it in place. -->
+<form
+  method="post"
+  action="/api/newsletter"
+  class={className}
+  data-newsletter-form
+  data-sending={t(locale, "newsletter.sending")}
+  data-submit={t(locale, "newsletter.submit")}
+>
+  <div class="mb-6 grid grid-cols-2 items-center justify-items-stretch gap-6 md:grid-cols-5">
+    <div class="col-span-2 md:col-span-1" data-newsletter-fields>
+      <label for="newsletter-name" class="sr-only">
+        {t(locale, "newsletter.name")}
+      </label>
+      <input
+        id="newsletter-name"
+        name="name"
+        autocomplete="name"
+        placeholder={t(locale, "newsletter.name")}
+        required
+        maxlength="200"
+        class={field}
+      />
+    </div>
+    <div class="col-span-2" data-newsletter-fields>
+      <label for="newsletter-email" class="sr-only">
+        {t(locale, "newsletter.email")}
+      </label>
+      <input
+        id="newsletter-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        placeholder={t(locale, "newsletter.email")}
+        required
+        maxlength="320"
+        class={field}
+      />
+    </div>
+    <input
+      type="text"
+      name="company"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      class="hidden"
+    />
+    <div data-newsletter-fields>
+      <button
+        type="submit"
+        class="border-corners w-full rounded-none py-2 text-white uppercase hover:bg-white hover:text-black disabled:opacity-60"
+      >
+        {t(locale, "newsletter.submit")}
+      </button>
+    </div>
+    <div class="text-[9px]">
+      {t(locale, "newsletter.disclaimer")}
+      <p
+        role="status"
+        aria-live="polite"
+        tabindex="-1"
+        class="outline-none"
+        data-newsletter-status
+      >
+        <span class="hidden" data-when="sent">
+          {t(locale, "newsletter.success")}
+        </span>
+        <span class="text-danger hidden" data-when="error">
+          {t(locale, "newsletter.error")}
+        </span>
+      </p>
+    </div>
+  </div>
+</form>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>(
+    "[data-newsletter-form]",
+  )) {
+    const status = form.querySelector<HTMLElement>("[data-newsletter-status]")!;
+    const show = (state: string) => {
+      form.querySelectorAll<HTMLElement>("[data-when]").forEach((el) => {
+        el.classList.toggle("hidden", el.dataset.when !== state);
+      });
+      // Once signed up, only the thanks stays.
+      form
+        .querySelectorAll<HTMLElement>("[data-newsletter-fields]")
+        .forEach((el) => el.classList.toggle("invisible", state === "sent"));
+      if (state === "sent") status.focus();
+    };
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = form.querySelector<HTMLButtonElement>(
+        'button[type="submit"]',
+      )!;
+      button.disabled = true;
+      button.textContent = form.dataset.sending ?? "";
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      }).catch(() => null);
+      button.disabled = false;
+      button.textContent = form.dataset.submit ?? "";
+      if (response?.ok) form.reset();
+      show(response?.ok ? "sent" : "error");
+      // Disabling the button dropped focus; give it back for a retry.
+      if (!response?.ok) button.focus();
+    });
+  }
+</script>

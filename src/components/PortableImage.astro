@@ -1,0 +1,8 @@
+---
+import SanityImage from "./SanityImage.astro";
+import type { SanityImage as Image } from "@/lib/sanity";
+
+const { node } = Astro.props as { node: Image };
+---
+
+<SanityImage image={node} sizes="(min-width: 768px) 720px, 100vw" />

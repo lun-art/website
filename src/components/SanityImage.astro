@@ -1,0 +1,27 @@
+---
+import { urlFor, type SanityImage } from "@/lib/sanity";
+
+type Props = {
+  image: SanityImage;
+  sizes?: string;
+  class?: string;
+  eager?: boolean;
+};
+const { image, sizes = "100vw", class: className, eager = false } = Astro.props;
+const widths = [480, 800, 1200, 1600, 2000];
+const srcset = image.asset
+  ? widths.map((w) => `${urlFor(image).width(w).url()} ${w}w`).join(", ")
+  : "";
+---
+
+{image.asset && (
+  <img
+    src={urlFor(image).width(1200).url()}
+    srcset={srcset}
+    sizes={sizes}
+    alt={image.alt ?? ""}
+    class={className}
+    loading={eager ? "eager" : "lazy"}
+    decoding="async"
+  />
+)}

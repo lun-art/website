@@ -1,0 +1,27 @@
+---
+import { localePath, localeStaticPaths, t, type Locale } from "@/i18n";
+import Base from "@/layouts/Base.astro";
+
+// Where a sign-up posted without JavaScript lands (see worker/newsletter.ts).
+export const getStaticPaths = localeStaticPaths;
+const { locale } = Astro.props as { locale: Locale };
+---
+
+<Base
+  locale={locale}
+  path="/newsletter/error"
+  title={t(locale, "newsletter.title")}
+  noindex
+>
+  <div class="mx-auto max-w-3xl px-6 py-24 font-mono">
+    <h1 class="text-3xl">{t(locale, "newsletter.title")}</h1>
+    <p class="mt-4" role="status">
+      {t(locale, "newsletter.error")}
+    </p>
+    <p class="mt-6">
+      <a class="underline" href={localePath(locale, "/")}>
+        {t(locale, "newsletter.back")}
+      </a>
+    </p>
+  </div>
+</Base>

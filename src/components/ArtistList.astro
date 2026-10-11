@@ -1,0 +1,26 @@
+---
+import { localePath, t, type Locale } from "@/i18n";
+import type { ArtistSummary } from "@/lib/sanity";
+
+type Props = { locale: Locale; artists: ArtistSummary[] };
+const { locale, artists } = Astro.props;
+---
+
+<section class="container mx-auto">
+  {artists.length ? (
+    <ul class="mx-12 my-8 grid items-center text-xs md:grid-cols-3">
+      {artists.map((artist) => (
+        <li class="flex justify-center">
+          <a
+            class="border border-transparent transition-colors hover:border-white"
+            href={localePath(locale, `/artist/${artist.slug}`)}
+          >
+            {artist.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="mx-12 my-8 text-center text-xs">{t(locale, "artists.empty")}</p>
+  )}
+</section>

@@ -1,0 +1,25 @@
+---
+import { localePath, localeStaticPaths, t, type Locale } from "@/i18n";
+import Base from "@/layouts/Base.astro";
+
+// Where a form posted without JavaScript lands (see worker/contact.ts).
+export const getStaticPaths = localeStaticPaths;
+const { locale } = Astro.props as { locale: Locale };
+---
+
+<Base
+  locale={locale}
+  path="/contact/sent"
+  title={t(locale, "contact.title")}
+  noindex
+>
+  <div class="mx-auto max-w-3xl px-4 py-12">
+    <h1 class="text-3xl font-semibold">{t(locale, "contact.title")}</h1>
+    <p class="mt-4" role="status">
+      {t(locale, "contact.success")}
+    </p>
+    <p class="mt-6">
+      <a href={localePath(locale, "/contact")}>{t(locale, "contact.back")}</a>
+    </p>
+  </div>
+</Base>

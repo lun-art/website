@@ -1,0 +1,14 @@
+---
+import { PortableText } from "astro-portabletext";
+import PortableImage from "./PortableImage.astro";
+
+type Props = { value: unknown[] };
+const { value } = Astro.props;
+---
+
+<div class="space-y-4 leading-relaxed">
+  <PortableText
+    value={value as never}
+    components={{ type: { imageWithAlt: PortableImage } }}
+  />
+</div>

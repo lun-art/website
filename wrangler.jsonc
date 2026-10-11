@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // scripts/provision.sh renames this to the client slug. It must match the
+  // Worker that Workers Builds is connected to.
+  "name": "lun-art",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-30",
+  // Free plan. Pages are static assets, served without running the Worker,
+  // so they use no CPU and don't count as Worker requests. The Worker runs
+  // only for /api/*, and the contact handler stays within a few ms of CPU.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"],
+  },
+  "observability": {
+    "enabled": true,
+  },
+}

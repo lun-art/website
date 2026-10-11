@@ -1,0 +1,17 @@
+---
+import { defaultLocale, localePath, t } from "@/i18n";
+import Base from "@/layouts/Base.astro";
+
+// Served by Workers static assets for any missing path (not_found_handling).
+const locale = defaultLocale;
+---
+
+<Base locale={locale} path="/404" title={t(locale, "notFound.title")} noindex>
+  <div class="mx-auto max-w-3xl px-4 py-12">
+    <h1 class="text-3xl font-semibold">{t(locale, "notFound.title")}</h1>
+    <p class="text-muted mt-4">{t(locale, "notFound.body")}</p>
+    <p class="mt-6">
+      <a href={localePath(locale, "/")}>{t(locale, "notFound.home")}</a>
+    </p>
+  </div>
+</Base>

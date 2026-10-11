@@ -1,0 +1,93 @@
+---
+import SanityImage from "@/components/SanityImage.astro";
+import { langParam, locales, t, type Locale } from "@/i18n";
+import Base from "@/layouts/Base.astro";
+import { artistsQuery, sanityFetch, type Artist } from "@/lib/sanity";
+import { excerpt } from "@/lib/site";
+
+// One file per artist per locale, built from Sanity at build time. The URLs
+// match the original site's /artist/<slug>.
+export async function getStaticPaths() {
+  const artists = (await sanityFetch<Artist[]>(artistsQuery)) ?? [];
+  return locales.flatMap((locale) =>
+    artists.map((artist) => ({
+      params: { lang: langParam(locale), slug: artist.slug },
+      props: { locale, artist },
+    })),
+  );
+}
+
+const { locale, artist } = Astro.props as { locale: Locale; artist: Artist };
+const description =
+  artist.seoDescription ??
+  (artist.statement
+    ? excerpt(artist.statement)
+    : t(locale, "artist.description", { name: artist.name }));
+const works = (artist.works ?? []).filter((work) => work.asset);
+---
+
+<Base
+  locale={locale}
+  path={`/artist/${artist.slug}`}
+  title={artist.name}
+  description={description}
+  image={works[0]}
+>
+  <section class="relative pb-12">
+    <div class="absolute inset-0 [background:linear-gradient(0deg,_rgba(32,_30,_30,_.05),_rgba(32,_30,_30,_0.5)),linear-gradient(0deg,_rgba(37,_35,_35,_1),_rgba(196,_196,_196,_0)_64%,_rgba(37,_35,_35,_1))]"></div>
+    <div class="relative container mx-auto">
+      <div class="mx-6 py-6 md:mx-12 md:py-12">
+        <div class="border-corners text-left">
+          <div class="p-6 py-16 sm:pt-64">
+            <h1 class="font-display mb-12 text-6xl font-extralight tracking-tight md:text-8xl lg:text-7xl xl:text-9xl">
+              {artist.name}
+              {artist.workTitle && (
+                <>
+                  <br />
+                  <span class="inline-flex items-baseline font-sans">
+                    {artist.workTitle}
+                  </span>
+                </>
+              )}
+            </h1>
+            {artist.website && (
+              <p class="mb-6 text-[17px]">
+                <a
+                  class="underline-offset-4 hover:underline"
+                  href={artist.website}
+                  rel="noopener"
+                >
+                  {artist.website
+                    .replace(/^https?:\/\//, "")
+                    .replace(/\/$/, "")}
+                </a>
+              </p>
+            )}
+            {artist.statement && (
+              <p class="text-[17px] whitespace-pre-wrap xl:w-1/2">
+                {artist.statement}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <hr class="relative mt-24" />
+      </div>
+    </div>
+  </section>
+
+  {works.length > 0 && (
+    <section class="grid grid-cols-1 gap-4 p-4 sm:grid-cols-3">
+      {works.map((work) => (
+        <SanityImage
+          image={{
+            ...work,
+            alt: work.alt ?? t(locale, "artist.workAlt", { name: artist.name }),
+          }}
+          sizes="(min-width: 640px) 33vw, 100vw"
+          class="w-full"
+        />
+      ))}
+    </section>
+  )}
+</Base>

@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "itsaplan-studio": {
+      "type": "http",
+      "url": "https://api.plan.home.x.zip/mcp",
+      "headersHelper": "/Users/allie/.config/itsaplan/headers.sh STUDIO"
+    }
+  }
+}

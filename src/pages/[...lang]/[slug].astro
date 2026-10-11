@@ -1,0 +1,36 @@
+---
+import Prose from "@/components/Prose.astro";
+import { langParam, locales, type Locale } from "@/i18n";
+import Base from "@/layouts/Base.astro";
+import { pagesQuery, sanityFetch, type Page } from "@/lib/sanity";
+
+// One file per CMS page per locale, built from Sanity at build time.
+export async function getStaticPaths() {
+  const pages = (await sanityFetch<Page[]>(pagesQuery)) ?? [];
+  return locales.flatMap((locale) =>
+    pages.map((page) => ({
+      params: { lang: langParam(locale), slug: page.slug },
+      props: { locale, page },
+    })),
+  );
+}
+
+const { locale, page } = Astro.props as { locale: Locale; page: Page };
+---
+
+<Base
+  locale={locale}
+  path={`/${page.slug}`}
+  title={page.title}
+  description={page.seoDescription}
+  image={page.seoImage}
+>
+  <div class="mx-auto max-w-3xl px-4 py-12">
+    <h1 class="font-display text-4xl font-semibold">{page.title}</h1>
+    {page.body && (
+      <div class="mt-8">
+        <Prose value={page.body} />
+      </div>
+    )}
+  </div>
+</Base>

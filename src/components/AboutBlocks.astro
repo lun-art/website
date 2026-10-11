@@ -1,0 +1,53 @@
+---
+import type { Home } from "@/lib/sanity";
+
+type Props = { blocks: NonNullable<Home["aboutBlocks"]> };
+const { blocks } = Astro.props;
+
+// Two blocks per row, with a rule between rows. Each block in a row of two
+// gets its own corner mark (× or +) and a side border on mobile, as in the
+// original design.
+const rows: Array<typeof blocks> = [];
+for (let i = 0; i < blocks.length; i += 2) rows.push(blocks.slice(i, i + 2));
+const marks = ["×", "+"];
+---
+
+<section class="container mx-auto">
+  {rows.map((row, r) => (
+    <>
+      {r > 0 && <hr class="mx-12 hidden sm:block" />}
+      <div class="mx-8 grid items-center md:my-8 md:grid-cols-2 md:divide-x">
+        {row.map((block, i) => {
+          const index = r * 2 + i;
+          const top = r % 2 === 0;
+          const side =
+            r % 2 === 0
+              ? i === 1 && "border-l md:border-l-0"
+              : i === 0 && "border-r md:border-r-0";
+          return (
+            <div class:list={["relative border-b p-4 md:border-b-0", side]}>
+              <h2 class="font-block text-left text-[42px] font-normal uppercase">
+                {block.title}
+              </h2>
+              <p class="text-muted m-0 min-h-[200px] max-w-[400px] pt-6 text-left text-base leading-[normal] whitespace-pre-line">
+                {block.text}
+              </p>
+              <p class="text-muted text-right text-xs leading-[normal] font-bold tracking-widest">
+                {String(index + 1).padStart(2, "0")}
+              </p>
+              <span
+                class:list={[
+                  "absolute",
+                  top ? "top-8 right-4" : "bottom-4 left-4",
+                ]}
+                aria-hidden="true"
+              >
+                {marks[i]}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  ))}
+</section>

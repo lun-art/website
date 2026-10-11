@@ -1,0 +1,37 @@
+---
+import { localePath, t, type Locale } from "@/i18n";
+import type { SiteSettings } from "@/lib/sanity";
+
+type Props = {
+  locale: Locale;
+  links: NonNullable<SiteSettings["socialLinks"]>;
+  motto?: string;
+};
+const { locale, links, motto } = Astro.props;
+---
+
+<!-- No agency credit on this site, by the owner's choice (AGENTS.md). -->
+<footer class="container mx-auto">
+  <div class="flex items-center">
+    <i class="cross-vert" aria-hidden="true"></i>
+    <div class="mx-auto w-full py-6 text-center text-xs">
+      <i class="cross mx-auto my-6" aria-hidden="true"></i>
+      <div class="my-12 inline-flex items-center">
+        <img src="/logo.svg" width="50" height="50" alt="" />
+      </div>
+      <div class="space-x-16 font-bold uppercase [&>*:hover]:font-normal">
+        {links.map((link) => (
+          <a class="bracket-link" href={link.url}>
+            {link.label}
+          </a>
+        ))}
+        <a class="bracket-link" href={localePath(locale, "/contact")}>
+          {t(locale, "nav.contact")}
+        </a>
+      </div>
+      {motto && <p class="mx-auto my-4 max-w-[416px] uppercase">{motto}</p>}
+      <i class="cross mx-auto my-12" aria-hidden="true"></i>
+    </div>
+    <i class="cross-vert" aria-hidden="true"></i>
+  </div>
+</footer>

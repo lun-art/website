@@ -22,6 +22,6 @@ Updated: 2026-10-11
 
 - Google Tag Manager sets cookies, so the site needs a consent banner for EU visitors while it's
   on. There isn't one.
-- The newsletter has no double opt-in: anyone can sign up any address. The Mailchimp form behaved
-  the same way.
+- The newsletter has no double opt-in: anyone can sign up any address. Whether the old Mailchimp
+  form confirmed sign-ups depended on that audience's settings, which weren't checked.
 - `og.png` is the name on the dark ground; the old site used the moon photograph.

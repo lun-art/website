@@ -63,20 +63,26 @@ describe("handleNewsletter", () => {
       email: "ana@example.com",
       first_name: "Ana",
       last_name: "Maria Lopez",
-      unsubscribed: false,
       segments: [{ id: "seg_1" }],
     });
   });
 
-  it("answers an existing contact as a success", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response("exists", { status: 409 })),
-    );
+  it("adds an existing contact to the segment, answered as a success", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response("exists", { status: 409 }))
+      .mockResolvedValueOnce(Response.json({ id: "seg_1" }));
+    vi.stubGlobal("fetch", fetchMock);
     expect((await handleNewsletter(post(valid), env)).status).toBe(200);
+    const [url, init] = fetchMock.mock.calls[1] as [string, RequestInit];
+    expect(url).toBe(
+      "https://api.resend.com/contacts/ana%40example.com/segments/seg_1",
+    );
+    expect(init.method).toBe("POST");
+    expect(init.body).toBeUndefined();
   });
 
-  it("reports a Resend failure", async () => {
+  it("reports a failure when neither call works", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => new Response("bad", { status: 422 })),

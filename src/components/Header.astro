@@ -1,6 +1,6 @@
 ---
 import { localePath, t, type Locale } from "@/i18n";
-import type { SiteSettings } from "@/lib/sanity";
+import { navPagesQuery, sanityFetch, type SiteSettings } from "@/lib/sanity";
 
 type Props = {
   locale: Locale;
@@ -8,6 +8,10 @@ type Props = {
   class?: string;
 };
 const { locale, links, class: className } = Astro.props;
+// CMS pages with "Show in navigation" ticked come first.
+const pages =
+  (await sanityFetch<Array<{ title: string; slug: string }>>(navPagesQuery)) ??
+  [];
 ---
 
 <!-- The links are hidden on small screens, as on the original site; the
@@ -22,6 +26,13 @@ const { locale, links, class: className } = Astro.props;
     </a>
     <div class="hidden w-full md:block md:w-auto">
       <ul class="flex flex-col space-x-4 py-4 text-right uppercase md:mt-0 md:flex-row md:space-x-8 md:text-sm md:font-medium [&>*:hover]:font-normal">
+        {pages.map((page) => (
+          <li>
+            <a class="bracket-link" href={localePath(locale, `/${page.slug}`)}>
+              {page.title}
+            </a>
+          </li>
+        ))}
         {links.map((link) => (
           <li>
             <a class="bracket-link" href={link.url}>

@@ -111,35 +111,47 @@ export async function handleNewsletter(
     wantsJson
       ? Response.json({ error: "Sign-up failed" }, { status: 502 })
       : back("error");
-  let response: Response;
-  try {
-    response = await fetch(
-      env.RESEND_CONTACTS_URL ?? "https://api.resend.com/contacts",
-      {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${env.RESEND_API_KEY}`,
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          first_name: firstName,
-          ...(lastName && { last_name: lastName }),
-          unsubscribed: false,
-          segments: [{ id: env.RESEND_SEGMENT_ID }],
-        }),
+  const contacts = env.RESEND_CONTACTS_URL ?? "https://api.resend.com/contacts";
+  const resend = (url: string, body?: unknown) =>
+    fetch(url, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "content-type": "application/json",
       },
-    );
+      ...(body !== undefined && { body: JSON.stringify(body) }),
+    });
+  try {
+    // No "unsubscribed" field: a sign-up must never re-subscribe someone
+    // who opted out.
+    let response = await resend(contacts, {
+      email,
+      first_name: firstName,
+      ...(lastName && { last_name: lastName }),
+      segments: [{ id: env.RESEND_SEGMENT_ID }],
+    });
+    if (!response.ok) {
+      // Most likely an existing contact: add them to the segment instead.
+      // Answered the same either way, so the form doesn't reveal who is
+      // already a contact.
+      const detail = await response.text().catch(() => "");
+      response = await resend(
+        `${contacts}/${encodeURIComponent(email)}/segments/${encodeURIComponent(env.RESEND_SEGMENT_ID)}`,
+      );
+      if (!response.ok) {
+        console.error(
+          "Resend failed",
+          response.status,
+          await response.text().catch(() => ""),
+          "after create failed with",
+          detail,
+        );
+        return failed();
+      }
+    }
   } catch (error) {
     // A network error rejects instead of returning a response.
     console.error("Resend unreachable", error);
-    return failed();
-  }
-  // 409: already a contact. Answer as a success so the form doesn't reveal
-  // who is subscribed.
-  if (!response.ok && response.status !== 409) {
-    const detail = await response.text().catch(() => "");
-    console.error("Resend failed", response.status, detail);
     return failed();
   }
   return wantsJson ? Response.json({ ok: true }) : back("sent");

@@ -13,6 +13,8 @@ const vars = {
   RESEND_FROM: "Site <hello@site.test>",
   CONTACT_NOTIFY_EMAIL: "owner@site.test",
   RESEND_API_URL: `${MOCK_RESEND}/emails`,
+  RESEND_SEGMENT_ID: "segment_e2e",
+  RESEND_CONTACTS_URL: `${MOCK_RESEND}/contacts`,
 };
 
 export default defineConfig({

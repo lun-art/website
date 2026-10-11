@@ -44,7 +44,14 @@ export const siteSettings = defineType({
       validation: (rule) => rule.email(),
     }),
     defineField({
+      name: "footerMotto",
+      title: "Footer line",
+      description: "The line under the links in the footer.",
+      type: "string",
+    }),
+    defineField({
       name: "socialLinks",
+      description: "Shown in the header and the footer, in this order.",
       title: "Social links",
       type: "array",
       of: [

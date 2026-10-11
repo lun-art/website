@@ -25,6 +25,10 @@ export default defineConfig({
                   .schemaType("siteSettings")
                   .documentId("siteSettings"),
               ),
+            S.listItem()
+              .title("Home page")
+              .id("home")
+              .child(S.document().schemaType("home").documentId("home")),
             S.divider(),
             ...S.documentTypeListItems().filter(
               (item) => !singletonTypes.has(item.getId() ?? ""),

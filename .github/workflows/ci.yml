@@ -48,8 +48,9 @@ jobs:
           cache: npm
       # Reproduces Workers Builds, which installs without peer dependencies.
       - run: npx npm@10.9.2 ci --legacy-peer-deps
-      # Analytics off for test builds, even once the site has its PostHog key.
-      - run: PUBLIC_POSTHOG_KEY= npm run build
+      # Analytics off for test builds, even once the site has its keys. The
+      # seed stands in for Sanity until the project ID is in .env.production.
+      - run: PUBLIC_POSTHOG_KEY= PUBLIC_GTM_ID= SANITY_SEED_FILE=sanity/seed/content.ndjson npm run build
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
       - uses: actions/upload-artifact@v7

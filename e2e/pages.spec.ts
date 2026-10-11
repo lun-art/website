@@ -1,7 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 const PAGES = [
-  { path: "/", title: /.+/ },
+  { path: "/", title: /^Arch Lunar Art Archive$/ },
+  { path: "/artist", title: /^Artists \| / },
+  {
+    path: "/artist/anarchy-dance-theatre",
+    title: /^Anarchy Dance Theatre \| /,
+  },
+  { path: "/artist/aaron-naves", title: /^Aaron Naves \| / },
   { path: "/contact", title: /^Contact \| / },
 ];
 
@@ -11,10 +17,6 @@ for (const { path, title } of PAGES) {
     expect(response?.status()).toBe(200);
     await expect(page).toHaveTitle(title);
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
-    await expect(page.getByRole("link", { name: "Talasi" })).toHaveAttribute(
-      "href",
-      "https://talasi.me",
-    );
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       new RegExp(`${path === "/" ? "/" : path}$`),
@@ -24,7 +26,13 @@ for (const { path, title } of PAGES) {
 }
 
 // Every indexable page, so each one is checked for a full link preview.
-const INDEXABLE = ["/", "/contact"];
+const INDEXABLE = [
+  "/",
+  "/artist",
+  "/artist/anarchy-dance-theatre",
+  "/artist/aaron-naves",
+  "/contact",
+];
 
 for (const path of INDEXABLE) {
   test(`${path} has an absolute link-preview image`, async ({ page }) => {
@@ -39,6 +47,10 @@ for (const path of INDEXABLE) {
       );
     }
     await expect(page.locator('meta[property="og:image:alt"]')).toHaveCount(1);
+    expect(
+      (await page.locator('meta[name="description"]').getAttribute("content"))
+        ?.length,
+    ).toBeGreaterThanOrEqual(30);
   });
 }
 
@@ -83,10 +95,30 @@ test("robots.txt and the sitemap are served", async ({ request }) => {
   expect(xml).toContain("/contact</loc>");
   expect(xml).not.toContain("/404");
   expect(xml).not.toContain("/contact/sent");
+  expect(xml).toContain("/artist/aaron-naves</loc>");
+  expect(xml).not.toContain("/newsletter/");
 });
 
 test("unknown API routes 404 from the Worker", async ({ request }) => {
   const response = await request.get("/api/nope");
   expect(response.status()).toBe(404);
   expect(await response.json()).toEqual({ error: "Not found" });
+});
+
+test("every artist from the old site keeps its URL", async ({ page }) => {
+  await page.goto("/artist");
+  const links = page.locator('main a[href^="/artist/"]');
+  await expect(links).toHaveCount(134);
+  await expect(links.first()).toHaveText("Aaron Naves");
+});
+
+test("an artist's website and statement are shown, with no broken images", async ({
+  page,
+}) => {
+  await page.goto("/artist/anarchy-dance-theatre");
+  await expect(
+    page.getByRole("link", { name: "www.anarchydancetheatre.com" }),
+  ).toHaveAttribute("href", "https://www.anarchydancetheatre.com");
+  await expect(page.getByText(/groundbreaking digital dance/)).toBeVisible();
+  await expect(page.locator("main img")).toHaveCount(0);
 });

@@ -134,7 +134,9 @@ describe("handleNewsletter", () => {
 
   it("is routed by the Worker and accepts only POST", async () => {
     const response = await worker.fetch(
-      new Request("https://site.example/api/newsletter"),
+      new Request("https://site.example/api/newsletter") as Parameters<
+        typeof worker.fetch
+      >[0],
       { ...env, ASSETS: {} as Fetcher },
     );
     expect(response.status).toBe(405);

@@ -3,7 +3,15 @@ import "@/styles/global.css";
 import Analytics from "@/components/Analytics.astro";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
-import { HREFLANG, locales, localePath, OG_LOCALE, type Locale } from "@/i18n";
+import TagManager from "@/components/TagManager.astro";
+import {
+  HREFLANG,
+  locales,
+  localePath,
+  OG_LOCALE,
+  t,
+  type Locale,
+} from "@/i18n";
 import type { SanityImage } from "@/lib/sanity";
 import {
   getSiteSettings,
@@ -23,6 +31,10 @@ type Props = {
   description?: string;
   image?: SanityImage;
   noindex?: boolean;
+  /** False when the page draws the header itself (the home page hero). */
+  header?: boolean;
+  /** Set the page in Space Mono, as the home page is. */
+  mono?: boolean;
 };
 
 const {
@@ -32,9 +44,12 @@ const {
   description,
   image,
   noindex = false,
+  header = true,
+  mono = false,
 } = Astro.props;
 const settings = await getSiteSettings();
 const siteName = siteNameOf(settings);
+const links = settings?.socialLinks ?? [];
 const site = Astro.site!.origin;
 const canonical = new URL(localePath(locale, path), site).href;
 const pageDescription = description ?? settings?.description;
@@ -108,14 +123,19 @@ const fullTitle = titleFor(
       />
     )}
     <Analytics />
+    <TagManager />
   </head>
   <body>
-    <div class="flex min-h-screen flex-col">
-      <Header locale={locale} siteName={siteName} />
-      <main id="main" class="flex-1">
-        <slot />
-      </main>
-      <Footer locale={locale} siteName={siteName} />
-    </div>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-10 focus:p-2"
+    >
+      {t(locale, "nav.skipToContent")}
+    </a>
+    {header && <Header class="relative" locale={locale} links={links} />}
+    <main id="main" class:list={[mono && "font-mono"]}>
+      <slot />
+    </main>
+    <Footer locale={locale} links={links} motto={settings?.footerMotto} />
   </body>
 </html>

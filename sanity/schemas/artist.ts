@@ -15,7 +15,8 @@ export const artist = defineType({
     defineField({
       name: "slug",
       type: "slug",
-      description: "The page address: /artist/<slug>. Don't change it once live.",
+      description:
+        "The page address: /artist/<slug>. Don't change it once live.",
       options: { source: "name", maxLength: 96 },
       validation: (rule) => rule.required(),
     }),

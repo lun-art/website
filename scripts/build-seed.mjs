@@ -22,13 +22,14 @@ const SEED_DATE = "2026-10-11T00:00:00Z";
 const documents = JSON.parse(
   await readFile(join(SEED, "documents.json"), "utf8"),
 );
-const artists = parseCsv(
-  await readFile(join(SEED, "artists.csv"), "utf8"),
-).map(artistFromRow);
+const artists = parseCsv(await readFile(join(SEED, "artists.csv"), "utf8")).map(
+  artistFromRow,
+);
 
 const slugs = new Set();
 for (const { slug } of artists) {
-  if (slugs.has(slug.current)) throw new Error(`duplicate slug ${slug.current}`);
+  if (slugs.has(slug.current))
+    throw new Error(`duplicate slug ${slug.current}`);
   slugs.add(slug.current);
 }
 

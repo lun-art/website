@@ -1,30 +1,128 @@
 @import "tailwindcss";
+@import "@fontsource/space-mono/400.css";
+@import "@fontsource/space-mono/700.css";
 
-/*
- * PLACEHOLDER TOKENS. Neutral on purpose, so nothing looks finished by
- * accident. Replace every value from the approved DESIGN.md before building
- * pages (see AGENTS.md, "Build order"). Keep the role names.
- */
+/* Tokens from the approved DESIGN.md (a port of the live lun.art design). */
 @theme {
-  --color-foreground: #111111;
-  --color-muted: #5f5f5f;
-  --color-background: #ffffff;
-  --color-panel: #f4f4f4;
-  --color-border: #d9d9d9;
-  --color-primary: #222222;
-  --color-primary-foreground: #ffffff;
-  --color-danger: #b42318;
-  --color-success: #067647;
+  --color-foreground: #ffffff;
+  --color-muted: #e8e6e6;
+  --color-background: #161414;
+  --color-panel: #252323;
+  --color-border: #e5e7eb;
+  --color-primary: #ffffff;
+  --color-primary-foreground: #000000;
+  --color-danger: #ff8a80;
+  --color-success: #b9f6ca;
 
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-sans);
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-display: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-mono:
+    "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --font-block: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 @layer base {
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
+  /* Tailwind 3's default border colour, which the live design relies on. */
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
   :focus-visible {
     @apply outline-primary outline-2 outline-offset-2;
+  }
+}
+
+/* Crop marks at the four corners of a box. */
+@utility border-corners {
+  background:
+    linear-gradient(to right, currentColor 1px, transparent 1px) 0 0,
+    linear-gradient(to right, currentColor 1px, transparent 1px) 0 100%,
+    linear-gradient(to left, currentColor 1px, transparent 1px) 100% 0,
+    linear-gradient(to left, currentColor 1px, transparent 1px) 100% 100%,
+    linear-gradient(to bottom, currentColor 1px, transparent 1px) 0 0,
+    linear-gradient(to bottom, currentColor 1px, transparent 1px) 100% 0,
+    linear-gradient(to top, currentColor 1px, transparent 1px) 0 100%,
+    linear-gradient(to top, currentColor 1px, transparent 1px) 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 15px 15px;
+}
+
+/* A horizontal rule with a tick through its middle. */
+@utility cross {
+  position: relative;
+  display: block;
+  width: 150px;
+  height: 1px;
+  color: var(--color-muted);
+  background: currentColor;
+  &::after {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 75px;
+    width: 1px;
+    height: 19px;
+    background: currentColor;
+  }
+}
+
+/* The footer's side marks: a short rule with a long tick. */
+@utility cross-vert {
+  position: relative;
+  display: block;
+  width: 19px;
+  height: 1px;
+  color: var(--color-muted);
+  background: currentColor;
+  &::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 9px;
+    width: 1px;
+    height: 40px;
+    background: currentColor;
+  }
+}
+
+/* Links that gain [ brackets ] on hover and keyboard focus. */
+@utility bracket-link {
+  &::before,
+  &::after {
+    display: inline-block;
+    opacity: 0;
+    transition:
+      transform 0.3s,
+      opacity 0.2s;
+  }
+  &::before {
+    content: "[";
+    margin-right: 10px;
+    transform: translateX(20px);
+  }
+  &::after {
+    content: "]";
+    margin-left: 10px;
+    transform: translateX(-20px);
+  }
+  &:hover::before,
+  &:hover::after,
+  &:focus-visible::before,
+  &:focus-visible::after {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &::before,
+    &::after {
+      transition: none;
+    }
   }
 }

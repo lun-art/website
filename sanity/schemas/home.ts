@@ -32,7 +32,8 @@ export const home = defineType({
     defineField({
       name: "aboutBlocks",
       title: "About blocks",
-      description: "The numbered blocks under the artist list. Four fill the grid.",
+      description:
+        "The numbered blocks under the artist list. Four fill the grid.",
       type: "array",
       of: [
         defineArrayMember({

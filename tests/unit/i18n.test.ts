@@ -23,8 +23,6 @@ describe("i18n", () => {
   });
 
   it("fills placeholders", () => {
-    expect(
-      t("en", "footer.rights", { year: 2026, siteName: "Client Co" }),
-    ).toBe("© 2026 Client Co");
+    expect(t("en", "artist.workAlt", { name: "Ana" })).toBe("A work by Ana");
   });
 });

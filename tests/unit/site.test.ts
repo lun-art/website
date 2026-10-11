@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  excerpt,
   jsonLdScript,
   organizationJsonLd,
   PLACEHOLDER_SITE_NAME,
@@ -59,5 +60,17 @@ describe("site helpers", () => {
     expect(organizationJsonLd(null, "https://client.example").logo).toBe(
       "https://client.example/apple-touch-icon.png",
     );
+  });
+});
+
+describe("excerpt", () => {
+  it("keeps short text and collapses whitespace", () => {
+    expect(excerpt("  Two\n\nlines ")).toBe("Two lines");
+  });
+
+  it("cuts long text at a word with an ellipsis", () => {
+    const out = excerpt("word ".repeat(60));
+    expect(out.length).toBeLessThanOrEqual(155);
+    expect(out).toMatch(/word…$/);
   });
 });

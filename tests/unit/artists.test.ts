@@ -20,7 +20,13 @@ describe("asUrl", () => {
 });
 
 describe("artistFromRow", () => {
-  const row = { slug: "a-b", name: " A B ", title: "", description: "", works: "" };
+  const row = {
+    slug: "a-b",
+    name: " A B ",
+    title: "",
+    description: "",
+    works: "",
+  };
 
   it("keeps a name-only artist minimal", () => {
     expect(artistFromRow(row)).toEqual({

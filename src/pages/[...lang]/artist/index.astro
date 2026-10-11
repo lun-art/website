@@ -1,0 +1,19 @@
+---
+import ArtistList from "@/components/ArtistList.astro";
+import BinaryHR from "@/components/BinaryHR.astro";
+import { localeStaticPaths, t, type Locale } from "@/i18n";
+import Base from "@/layouts/Base.astro";
+import { artistListQuery, sanityFetch, type ArtistSummary } from "@/lib/sanity";
+
+export const getStaticPaths = localeStaticPaths;
+
+const { locale } = Astro.props as { locale: Locale };
+const artists = (await sanityFetch<ArtistSummary[]>(artistListQuery)) ?? [];
+---
+
+<Base locale={locale} path="/artist" title={t(locale, "artists.title")}>
+  <h1 class="sr-only">{t(locale, "artists.title")}</h1>
+  <BinaryHR />
+  <ArtistList locale={locale} artists={artists} />
+  <BinaryHR />
+</Base>

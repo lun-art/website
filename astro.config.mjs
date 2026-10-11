@@ -18,11 +18,13 @@ export default defineConfig({
   output: "static",
   trailingSlash: "never",
   build: { format: "file" },
-  // The 404 and contact result pages stay out of the sitemap.
+  // The 404 and the form result pages stay out of the sitemap.
   integrations: [
     sitemap({
       filter: (page) =>
-        !/\/(404|contact\/(sent|error))$/.test(new URL(page).pathname),
+        !/\/(404|(contact|newsletter)\/(sent|error))$/.test(
+          new URL(page).pathname,
+        ),
     }),
   ],
   vite: { plugins: [tailwindcss()] },

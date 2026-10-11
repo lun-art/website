@@ -1,0 +1,27 @@
+---
+import { posthogSettings } from "@/lib/analytics";
+
+// Rendered only when PUBLIC_POSTHOG_KEY and PUBLIC_POSTHOG_HOST are both set.
+const enabled = posthogSettings(import.meta.env) !== null;
+---
+
+{enabled && <script>
+  import { posthogOptions, posthogSettings } from "@/lib/analytics";
+
+  // Only these two values are inlined into the bundle.
+  const settings = posthogSettings({
+    PUBLIC_POSTHOG_KEY: import.meta.env.PUBLIC_POSTHOG_KEY,
+    PUBLIC_POSTHOG_HOST: import.meta.env.PUBLIC_POSTHOG_HOST,
+  });
+  if (settings) {
+    // A deferred module that imports the SDK on its own, off the page's
+    // critical path.
+    import("posthog-js")
+      .then(({ default: posthog }) => {
+        posthog.init(settings.key, posthogOptions(settings.host));
+      })
+      .catch(() => {
+        // Blocked or failed to load: the site works the same without it.
+      });
+  }
+</script>}

@@ -1,0 +1,3 @@
+# Keep SVGs byte-identical on every OS, so the placeholder icon hash in
+# tests/unit/icons.test.ts matches on Windows checkouts too.
+*.svg text eol=lf

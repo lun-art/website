@@ -1,0 +1,35 @@
+---
+import { localePath, t, type Locale } from "@/i18n";
+import { navPagesQuery, sanityFetch } from "@/lib/sanity";
+
+type Props = { locale: Locale; siteName: string };
+const { locale, siteName } = Astro.props;
+const pages =
+  (await sanityFetch<Array<{ title: string; slug: string }>>(navPagesQuery)) ??
+  [];
+---
+
+<header class="border-border border-b">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:p-2">
+    {t(locale, "nav.skipToContent")}
+  </a>
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-6 px-4 py-4">
+    <a href={localePath(locale, "/")} class="font-semibold no-underline">
+      {siteName}
+    </a>
+    <nav aria-label={t(locale, "nav.primary")}>
+      <ul class="flex items-center gap-5 text-sm">
+        {pages.map((page) => (
+          <li>
+            <a href={localePath(locale, `/${page.slug}`)}>{page.title}</a>
+          </li>
+        ))}
+        <li>
+          <a href={localePath(locale, "/contact")}>
+            {t(locale, "nav.contact")}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

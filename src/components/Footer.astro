@@ -1,0 +1,27 @@
+---
+import { t, type Locale } from "@/i18n";
+import { TALASI_URL } from "@/lib/site";
+
+type Props = { locale: Locale; siteName: string };
+const { locale, siteName } = Astro.props;
+---
+
+<footer class="border-border border-t">
+  <div class="text-muted mx-auto flex max-w-5xl flex-wrap justify-between gap-4 px-4 py-6 text-sm">
+    <p>
+      {t(locale, "footer.rights", { year: new Date().getFullYear(), siteName })}
+    </p>
+    <!-- Agency credit. Keep it on every client site. -->
+    <p>
+      {t(locale, "footer.builtBy")}{" "}
+      <a
+        href={TALASI_URL}
+        target="_blank"
+        rel="noopener"
+        class="hover:text-foreground underline"
+      >
+        Talasi
+      </a>
+    </p>
+  </div>
+</footer>

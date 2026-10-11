@@ -1,0 +1,60 @@
+name: CI
+
+# Every pull request and every push to main: lint, types, unit tests, the
+# static build, and e2e against `wrangler dev` (the same assets + Worker
+# setup as production). Renovate automerges only when all of this is green.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Lint, types, unit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+
+  e2e:
+    name: Build and E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Optional: a non-production Sanity dataset for the CMS-publish test.
+      E2E_SANITY_PROJECT_ID: ${{ vars.E2E_SANITY_PROJECT_ID }}
+      E2E_SANITY_DATASET: ${{ vars.E2E_SANITY_DATASET }}
+      E2E_SANITY_WRITE_TOKEN: ${{ secrets.E2E_SANITY_WRITE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: npm
+      # Reproduces Workers Builds, which installs without peer dependencies.
+      - run: npx npm@10.9.2 ci --legacy-peer-deps
+      # Analytics off for test builds, even once the site has its PostHog key.
+      - run: PUBLIC_POSTHOG_KEY= npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7

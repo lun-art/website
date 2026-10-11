@@ -1,0 +1,131 @@
+---
+import { t, type Locale } from "@/i18n";
+
+type Props = { locale: Locale };
+const { locale } = Astro.props;
+const field =
+  "border-border bg-background w-full rounded border px-3 py-2 text-base";
+---
+
+<!-- Works without JavaScript (a normal POST answered with a redirect); the
+     script below upgrades it to an in-place submit. -->
+<form
+  method="post"
+  action="/api/contact"
+  class="mt-8 flex flex-col gap-5"
+  data-contact-form
+  data-sending={t(locale, "contact.sending")}
+  data-submit={t(locale, "contact.submit")}
+>
+  <!-- Hidden once the message is sent, leaving only the status line. -->
+  <div class="flex flex-col gap-5" data-contact-fields>
+    <div class="flex flex-col gap-1.5">
+      <label for="contact-name" class="text-sm font-medium">
+        {t(locale, "contact.name")}
+      </label>
+      <input
+        id="contact-name"
+        name="name"
+        autocomplete="name"
+        required
+        maxlength="200"
+        class={field}
+      />
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label for="contact-email" class="text-sm font-medium">
+        {t(locale, "contact.email")}
+      </label>
+      <input
+        id="contact-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength="320"
+        class={field}
+      />
+    </div>
+    <div class="flex flex-col gap-1.5">
+      <label for="contact-message" class="text-sm font-medium">
+        {t(locale, "contact.message")}
+      </label>
+      <textarea
+        id="contact-message"
+        name="message"
+        rows="6"
+        required
+        maxlength="5000"
+        class={field}
+      ></textarea>
+    </div>
+    <input
+      type="text"
+      name="company"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      class="hidden"
+    />
+    <button
+      type="submit"
+      class="bg-primary text-primary-foreground rounded px-4 py-2 font-medium disabled:opacity-60"
+    >
+      {t(locale, "contact.submit")}
+    </button>
+  </div>
+  <p
+    role="status"
+    aria-live="polite"
+    tabindex="-1"
+    class="text-sm outline-none"
+    data-contact-status
+  >
+    <span class="text-success hidden" data-when="sent">
+      {t(locale, "contact.success")}
+    </span>
+    <span class="text-danger hidden" data-when="error">
+      {t(locale, "contact.error")}
+    </span>
+  </p>
+</form>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>(
+    "[data-contact-form]",
+  )) {
+    const fields = form.querySelector<HTMLElement>("[data-contact-fields]")!;
+    const status = form.querySelector<HTMLElement>("[data-contact-status]")!;
+    const show = (state: string) => {
+      form.querySelectorAll<HTMLElement>("[data-when]").forEach((el) => {
+        el.classList.toggle("hidden", el.dataset.when !== state);
+      });
+      // Once sent, the fields go and only the thanks stays. A second message
+      // needs a reload: a little friction against repeat sends.
+      fields.classList.toggle("hidden", state === "sent");
+      if (state === "sent") status.focus();
+    };
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = form.querySelector<HTMLButtonElement>(
+        'button[type="submit"]',
+      )!;
+      button.disabled = true;
+      button.textContent = form.dataset.sending ?? "";
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      }).catch(() => null);
+      button.disabled = false;
+      button.textContent = form.dataset.submit ?? "";
+      if (response?.ok) form.reset();
+      show(response?.ok ? "sent" : "error");
+      // Disabling the button dropped focus; give it back for a retry.
+      if (!response?.ok) button.focus();
+    });
+  }
+</script>

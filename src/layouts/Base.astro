@@ -1,0 +1,121 @@
+---
+import "@/styles/global.css";
+import Analytics from "@/components/Analytics.astro";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import { HREFLANG, locales, localePath, OG_LOCALE, type Locale } from "@/i18n";
+import type { SanityImage } from "@/lib/sanity";
+import {
+  getSiteSettings,
+  jsonLdScript,
+  organizationJsonLd,
+  siteNameOf,
+  socialImageFor,
+  titleFor,
+  websiteJsonLd,
+} from "@/lib/site";
+
+type Props = {
+  locale: Locale;
+  /** Locale-relative path of this page, e.g. "/contact" or "/". */
+  path: string;
+  title?: string;
+  description?: string;
+  image?: SanityImage;
+  noindex?: boolean;
+};
+
+const {
+  locale,
+  path,
+  title,
+  description,
+  image,
+  noindex = false,
+} = Astro.props;
+const settings = await getSiteSettings();
+const siteName = siteNameOf(settings);
+const site = Astro.site!.origin;
+const canonical = new URL(localePath(locale, path), site).href;
+const pageDescription = description ?? settings?.description;
+// Falls back to the committed /og.png, so every page has a link preview.
+const ogImage = socialImageFor(
+  site,
+  image,
+  settings?.defaultSeoImage,
+  settings?.logo,
+);
+const ogImageAlt = ogImage.alt || siteName;
+const isHome = path === "/";
+// The homepage has no page title of its own; the tagline follows the name.
+const fullTitle = titleFor(
+  title,
+  siteName,
+  isHome ? settings?.tagline : undefined,
+);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {pageDescription && <meta name="description" content={pageDescription} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    {locales.map((l) => (
+      <link
+        rel="alternate"
+        hreflang={HREFLANG[l]}
+        href={new URL(localePath(l, path), site).href}
+      />
+    ))}
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(path, site).href}
+    />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title ?? fullTitle} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={OG_LOCALE[locale]} />
+    {pageDescription && (
+      <meta property="og:description" content={pageDescription} />
+    )}
+    <meta property="og:image" content={ogImage.url} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage.url} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    <script
+      type="application/ld+json"
+      set:html={jsonLdScript(organizationJsonLd(settings, site))}
+    />
+    {isHome && (
+      <script
+        type="application/ld+json"
+        set:html={jsonLdScript(
+          websiteJsonLd(siteName, new URL("/", site).href),
+        )}
+      />
+    )}
+    <Analytics />
+  </head>
+  <body>
+    <div class="flex min-h-screen flex-col">
+      <Header locale={locale} siteName={siteName} />
+      <main id="main" class="flex-1">
+        <slot />
+      </main>
+      <Footer locale={locale} siteName={siteName} />
+    </div>
+  </body>
+</html>

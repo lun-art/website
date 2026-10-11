@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/*
+ * PLACEHOLDER TOKENS. Neutral on purpose, so nothing looks finished by
+ * accident. Replace every value from the approved DESIGN.md before building
+ * pages (see AGENTS.md, "Build order"). Keep the role names.
+ */
+@theme {
+  --color-foreground: #111111;
+  --color-muted: #5f5f5f;
+  --color-background: #ffffff;
+  --color-panel: #f4f4f4;
+  --color-border: #d9d9d9;
+  --color-primary: #222222;
+  --color-primary-foreground: #ffffff;
+  --color-danger: #b42318;
+  --color-success: #067647;
+
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sans);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  :focus-visible {
+    @apply outline-primary outline-2 outline-offset-2;
+  }
+}

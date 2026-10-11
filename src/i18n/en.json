@@ -1,0 +1,22 @@
+{
+  "nav.contact": "Contact",
+  "nav.skipToContent": "Skip to content",
+  "nav.primary": "Main",
+  "footer.rights": "© {year} {siteName}",
+  "footer.builtBy": "Built by",
+  "home.emptyTitle": "Nothing published yet",
+  "home.emptyBody": "Publish a page with the slug \"home\" in the Studio and it appears here after the next build.",
+  "contact.title": "Contact",
+  "contact.description": "Send us a message and we'll get back to you.",
+  "contact.name": "Name",
+  "contact.email": "Email",
+  "contact.message": "Message",
+  "contact.submit": "Send message",
+  "contact.sending": "Sending…",
+  "contact.success": "Thanks, your message has been sent.",
+  "contact.error": "Your message couldn't be sent. Please try again.",
+  "notFound.title": "Page not found",
+  "notFound.body": "The page you were looking for doesn't exist.",
+  "notFound.home": "Go to the homepage",
+  "contact.back": "Back to the contact form"
+}

@@ -26,6 +26,11 @@ They join the newsletter segment in Resend (Audience). Send newsletters from Res
 
 They're emailed to [CONTACT EMAIL]. Reply directly: the reply goes to the visitor.
 
+## Visitor numbers
+
+PostHog (EU cloud), organization **lun-art**, project **lun.art**: Web analytics shows visits and
+top pages. It's cookieless, so there's no consent banner.
+
 ## Asking for changes
 
 Ask in the group chat. The assistant can edit content directly. Changes to how the site works
